@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.1.2
+
+1. **Windows always glide.** Every move is carried over a moment, as macOS's own tiling carries a window, and the Animate windows switch is gone.
+
+**Fixes**
+
+- A window put at once (a tiling, an app without macOS's Move & Resize) no longer flashes what is behind it going from the whole screen to the right half.
+
 ## v0.1.1
 
 1. **Animate windows.** A switch in General: off, the default, a window is put in its place at once; on, it is carried there over a moment, as macOS's own tiling carries one.
