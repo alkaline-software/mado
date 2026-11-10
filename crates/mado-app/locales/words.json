@@ -89,6 +89,15 @@
     "de": "Fast maximieren",
     "es": "Casi maximizar"
   },
+  "Animate windows": {
+    "zh-Hans": "窗口动画",
+    "zh-Hant": "視窗動畫",
+    "ja": "ウインドウのアニメーション",
+    "ko": "윈도우 애니메이션",
+    "fr": "Animer les fenêtres",
+    "de": "Fenster animieren",
+    "es": "Animar las ventanas"
+  },
   "Appearance": {
     "zh-Hans": "外观",
     "zh-Hant": "外觀",

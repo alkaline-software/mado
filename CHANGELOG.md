@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.1.1
+
+1. **Animate windows.** A switch in General: off, the default, a window is put in its place at once; on, it is carried there over a moment, as macOS's own tiling carries one.
+2. **About.** The icon and the name open Mado's page on GitHub.
+
 ## v0.1.0
 
 1. **Windows from the keyboard.** Halves, corners, the whole screen, the middle, larger and smaller and the next display, each on a shortcut of its own, with Rectangle's shortcuts to begin with.

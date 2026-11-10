@@ -107,6 +107,15 @@ pub fn place_own(_action: Action, _screens: &[Screen], _memory: &Mutex<Memory>) 
     Err(Refused::Elsewhere)
 }
 
+/// Whether windows are carried to their places over a moment or put
+/// there at once (`AppConfig::animate`). Elsewhere nothing moves.
+#[cfg(target_os = "macos")]
+pub fn set_animate(on: bool) {
+    place::set_glide(on);
+}
+#[cfg(not(target_os = "macos"))]
+pub fn set_animate(_on: bool) {}
+
 /// How long a move of Mado's own window takes, as macOS's tiling's.
 #[cfg(target_os = "macos")]
 pub const TILE_MS: u64 = place::TILE_MS;

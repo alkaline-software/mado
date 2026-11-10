@@ -3686,7 +3686,7 @@ dependencies = [
 
 [[package]]
 name = "mado-app"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "anyhow",
  "block2 0.6.2",
@@ -3715,7 +3715,7 @@ dependencies = [
 
 [[package]]
 name = "mado-core"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "anyhow",
  "dirs 5.0.1",

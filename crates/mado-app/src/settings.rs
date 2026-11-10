@@ -472,6 +472,7 @@ impl Mado {
         let (shown, swapped) = (self.cfg.menu_bar.shown, self.cfg.menu_bar.swap);
         let in_bar = self.motion.switch("menu-bar", shown, Rc::new(move |this: &mut Self, on, _, cx| this.set_menu_bar(on, swapped, cx)), cx);
         let swap = self.motion.switch("swap", swapped, Rc::new(move |this: &mut Self, on, _, cx| this.set_menu_bar(shown, on, cx)), cx);
+        let animate = self.motion.switch("animate", self.cfg.app.animate, Rc::new(|this: &mut Self, on, _, cx| this.set_animate(on, cx)), cx);
         let looks = div().w(CONTROL_W).child(self.motion.segmented(
             "appearance",
             vec![("system", "icons/device-desktop.svg", t("System").into()), ("light", "icons/sun.svg", t("Light").into()), ("dark", "icons/moon.svg", t("Dark").into())],
@@ -500,6 +501,7 @@ impl Mado {
                     line(t("Open at login").into(), self.login_said.clone().map(SharedString::from), login, &theme),
                     line(t("Show in menu bar").into(), (!shown).then(|| SharedString::from(t("Open Mado again to see the settings."))), in_bar, &theme),
                     line(t("Swap clicks").into(), Some(swap_line.into()), swap, &theme),
+                    line(t("Animate windows").into(), None, animate, &theme),
                     line(t("Appearance").into(), None, looks.into_any_element(), &theme),
                 ],
                 &theme,
@@ -913,8 +915,9 @@ impl Mado {
             .pt(px(30.))
             .pb(px(28.))
             .child(weave(&t("{studio} presents"), vec![("studio", studio)], h_flex().text_size(px(14.)).text_color(theme.muted_foreground).gap(px(0.))))
-            .child(img("icon/icon-512.png").mt(px(18.)).size(px(88.)))
-            .child(h_flex().mt(px(6.)).items_center().child(wordmark("Mado", 42., theme.primary, cx)).when_some(KANJI, |d, k| d.child(kanji(k, 42., theme.primary, cx))))
+            // The icon and the name open the source, as the GitHub pill does.
+            .child(div().id("about-icon").mt(px(18.)).cursor_pointer().hover(|s| s.opacity(0.82)).on_click(|_, _, _| crate::sys::open(&update::repo_page())).child(img("icon/icon-512.png").size(px(88.))))
+            .child(h_flex().id("about-name").mt(px(6.)).items_center().cursor_pointer().hover(|s| s.opacity(0.82)).on_click(|_, _, _| crate::sys::open(&update::repo_page())).child(wordmark("Mado", 42., theme.primary, cx)).when_some(KANJI, |d, k| d.child(kanji(k, 42., theme.primary, cx))))
             .child(div().mt(px(4.)).text_size(px(12.5)).text_color(theme.muted_foreground).child(tf("Version {version}", &[("version", &update::current_version())])));
         let pills = h_flex()
             .w_full()

@@ -3,6 +3,7 @@
 //! it. The core decides where it goes (`layout::Memory::plan`); this
 //! carries it out and says what the window took.
 
+use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Mutex;
 use std::time::Duration;
 
@@ -133,6 +134,9 @@ fn choose(app: &Element, pid: i32, c: Command) -> bool {
 /// nothing, for the caller to put it at once. Waits while the app moves
 /// it, a second at most: off the main thread.
 fn by_command(app: &Element, window: &Element, action: Action, before: Rect) -> Option<Rect> {
+    if !GLIDE.load(Ordering::Relaxed) {
+        return None;
+    }
     let c = command(action)?;
     if !choose(app, app.pid()?, c) {
         return None;
@@ -169,6 +173,9 @@ fn by_command(app: &Element, window: &Element, action: Action, before: Rect) -> 
 /// returns.
 fn own_animate(id: u64, to: &Rect) -> bool {
     use objc2_app_kit::NSApplication;
+    if !GLIDE.load(Ordering::Relaxed) {
+        return false;
+    }
     let Some(mtm) = MainThreadMarker::new() else { return false };
     let app = NSApplication::sharedApplication(mtm);
     let Some(window) = app.keyWindow().or_else(|| app.mainWindow()) else { return false };
@@ -186,6 +193,15 @@ fn own_animate(id: u64, to: &Rect) -> bool {
 
 /// How long macOS's tiling takes to carry a window, and Mado's own with it.
 pub const TILE_MS: u64 = 350;
+
+/// Whether a window is carried to its place (the system's command, Mado's
+/// own by AppKit) or put there at once: the person's Animate windows,
+/// off unless turned on. Set at launch and at each change.
+static GLIDE: AtomicBool = AtomicBool::new(false);
+
+pub fn set_glide(on: bool) {
+    GLIDE.store(on, Ordering::Relaxed);
+}
 
 /// The app's menu titled `title` made the one AppKit keeps as its Window
 /// menu, which it fills with Move & Resize. gpui marks it only when it is

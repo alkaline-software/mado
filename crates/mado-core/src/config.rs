@@ -25,11 +25,14 @@ pub struct AppConfig {
     /// Ask for the newest release once a day and say so in Settings.
     /// Nothing is installed without the person's press.
     pub check_updates: bool,
+    /// A window is carried to its place over a moment, as macOS's own
+    /// tiling carries one; off, it is put there at once.
+    pub animate: bool,
 }
 
 impl Default for AppConfig {
     fn default() -> Self {
-        Self { appearance: "system".into(), language: "system".into(), check_updates: true }
+        Self { appearance: "system".into(), language: "system".into(), check_updates: true, animate: false }
     }
 }
 
