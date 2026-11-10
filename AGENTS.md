@@ -73,7 +73,7 @@ crates/mado-app/           the window
   assets/ themes/ locales/   icons, each action's picture, the app icon, the menu bar image; the palette; the words
   macos/                     the Info.plist additions (LSUIElement, the languages)
 vendor/                    gpui-component and block, each with an UPSTREAM.md
-scripts/                   dev-app.sh, relaunch.sh, make-icon.sh and icon/, actions/icons.py, dmg/, release-*.sh
+scripts/                   dev-app.sh, relaunch.sh, make-icon.sh and icon/, make-readme-gif.sh and readme/, actions/icons.py, dmg/, release-*.sh
 docs/                      design.md, placing.md, platform.md, probing.md, performance.md, release.md
 ```
 

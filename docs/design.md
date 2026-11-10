@@ -57,11 +57,17 @@ Sizes, in points: a section's name 15 semibold; a row's name 13; text in a contr
 
 ## The app icon
 
-The studio's manner (the cream ground with a fifth of the accent in it, navy lines, one amber stroke), drawn in `scripts/icon/icon.html` and rendered by `scripts/make-icon.sh --menubar`. Mado's icon has no violet spark, the one place it leaves the studio's manner: the spark is the mark of a model at work, and Mado has none.
+The studio's manner (the cream ground with a fifth of the accent in it, navy lines, one amber stroke), drawn in `scripts/icon/icon.html` and rendered by `scripts/make-icon.sh --menubar`. No violet spark: the spark is the mark of a model at work, and Mado has none.
 
 - **The subject is a window shrunk to its left half**: a white sheet in a navy frame, its title bar with three navy dots, orchid's dark shade under the title bar to the frame, standing on the left half of where it was. The whole window it was stays as a faint navy outline (28%), and one amber arrow points back from there to the half: a window Mado placed, and the size it changed. The frame and the arrow have the weights of the icon before it (2.8 and 4.2 in the 100-unit box). Below 32 pixels the dots go, the arrow is navy, and the frame thickens.
 - **The menu bar's image is the same drawing in one color**: the half solid, the outline of where it was at 40% (a template image keeps its alpha, and the system tints it), and the arrow. The candidate draws it whole (`template`), where the earlier ones were a silhouette with one feature cut out.
 - **Tried and dropped**: the window with its left pane in orchid and the spark in its title bar, the icon before this one (the spark says a model is at work, and a filled pane says less of a window that changed its size); the window in thirds (at 32 pixels the three panes read as a table); and, without the spark, a window in quarters with an arrow into the top left, a double arrow for resizing, a hooked arrow for Restore, a round window (丸窓) and two panes sliding over each other. The candidates before this one are in the page's `CANDIDATES`.
+
+## The README's picture
+
+The GIF at the head of the README (`.github/readme.gif`) is drawn in emaki.lol's hand, so the studio's pages read as one: hairlines on warm paper (`#F3F1EA`), each window a pale wash of its color with an edge of it (the browser slate, the notes sage), Source Serif 4 for the name and the title, its italic beside JetBrains Mono for the list of moves. A screen with its menu bar and Mado's image in it stands at the left; at the right, the moves, each lit in orchid while it plays: ⌃⌥← and ⌃⌥→ on caps, then a drag away (its own size back), a drag to a corner and a drag to the top, each with the footprint before it is let go. The windows move on Mado's own curves (350 ms, cubic-bezier 0.3, 1, 0.3, 1; the footprint's 280 ms grow), and for the loop they dip out where they ended and come back where they began, so neither crosses the other.
+
+`scripts/readme/readme.html` is the drawing, a canvas that plays in a browser and draws any frame on its own (`frame(i)`); `scripts/make-readme-gif.sh` renders the twelve seconds at 30 frames a second through WebKit (`scripts/readme/render.swift`, which hands the icon in as data: drawn from a file it taints the canvas) and makes the GIF with one palette for the loop. A change to what Mado does that the picture shows is a change to the drawing, rendered again.
 
 ## The window
 
