@@ -143,10 +143,61 @@ function drawWindow(ctx, u, small, { panes = 2 } = {}) {
 // compared on the same page at every size. docs/design.md names the one
 // chosen and why the others lost.
 const VARIANT = 0;
+// The right edge the window is shrunk to: a little past the middle, so the
+// half reads as a window of its own beside the place it left.
+const HALF = 53;
 const CANDIDATES = [
   {
+    name: 'A window shrunk to its left half',
+    desc: 'The window Mado moved, from the front: a white sheet in a navy frame, its title bar with three dots, orchid under it, shrunk to the left half of where it stood. Where it was stays as a faint navy outline, and one amber arrow points back from there, the size it gave up. No spark: Mado has no model at work. Below 32 px the dots go, the arrow is navy, and the frame thickens.',
+    subject(ctx, u, small) {
+      const w = small ? 4.2 : 2.8, lw = snap(u, 0, w)[1];
+      const [x0] = snap(u, WIN.x0, w), [x1] = snap(u, WIN.x1, w), [xm] = snap(u, HALF, w);
+      const [y0] = snap(u, WIN.y0, w), [y1] = snap(u, WIN.y1, w), [bar] = snap(u, WIN.bar, w);
+      ctx.lineJoin = 'round';
+      // Where it was: the whole window's frame, faint.
+      ctx.save();
+      ctx.globalAlpha = 0.28; ctx.strokeStyle = NAVY; ctx.lineWidth = lw;
+      rr(ctx, x0, y0, x1 - x0, y1 - y0, WIN.r); ctx.stroke();
+      ctx.restore();
+      // Where it is: the left half, orchid under its title bar to its frame.
+      rr(ctx, x0, y0, xm - x0, y1 - y0, WIN.r); ctx.fillStyle = '#ffffff'; ctx.fill();
+      ctx.save();
+      rr(ctx, x0, y0, xm - x0, y1 - y0, WIN.r); ctx.clip();
+      ctx.fillStyle = ACCENT; ctx.fillRect(x0, bar, xm - x0, y1 - bar);
+      ctx.restore();
+      stroke(ctx, [[x0, bar], [xm, bar]], NAVY, lw, 'butt');
+      ctx.strokeStyle = NAVY; ctx.lineWidth = lw;
+      rr(ctx, x0, y0, xm - x0, y1 - y0, WIN.r); ctx.stroke();
+      if (!small) {
+        ctx.fillStyle = NAVY;
+        for (const x of [24, 29.5, 35]) { ctx.beginPath(); ctx.arc(x, 29, 1.75, 0, Math.PI * 2); ctx.fill(); }
+      }
+      // The arrow back from where it was.
+      const [ay, aw] = snap(u, 60, small ? 4.6 : 4.2), c = small ? NAVY : AMBER;
+      stroke(ctx, [[75, ay], [61, ay]], c, aw);
+      stroke(ctx, [[67, ay - 6], [61, ay], [67, ay + 6]], c, aw);
+    },
+    // The bounds the menu bar's image is fitted to: the whole window.
+    silhouette(ctx) { rr(ctx, WIN.x0, WIN.y0, WIN.x1 - WIN.x0, WIN.y1 - WIN.y0, WIN.r); ctx.fill(); ctx.stroke(); },
+    // The menu bar's image, drawn whole: the half solid, where it was a
+    // frame at 40% (a template image keeps its alpha), and the arrow.
+    template(ctx) {
+      ctx.save();
+      ctx.globalAlpha = 0.4; ctx.lineWidth = 5;
+      rr(ctx, WIN.x0, WIN.y0, WIN.x1 - WIN.x0, WIN.y1 - WIN.y0, 10); ctx.stroke();
+      ctx.restore();
+      rr(ctx, WIN.x0, WIN.y0, 35, WIN.y1 - WIN.y0, 10); ctx.fill();
+      ctx.lineWidth = 5.2; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+      ctx.beginPath();
+      ctx.moveTo(74.8, 58.7); ctx.lineTo(62, 58.7);
+      ctx.moveTo(68.6, 51.7); ctx.lineTo(61.6, 58.7); ctx.lineTo(68.6, 65.7);
+      ctx.stroke();
+    },
+  },
+  {
     name: 'A window, its left half in place',
-    desc: 'A window from the front: a white sheet in a navy frame, its title bar, a mullion down its middle, and the left pane filled with orchid, the half a shortcut put it in. One amber line of content in the right pane, and the spark in the title bar. Below 32 px the amber line and the spark go, and the frame thickens.',
+    desc: 'A window from the front: a white sheet in a navy frame, its title bar, a mullion down its middle, and the left pane filled with orchid, the half a shortcut put it in. One amber line of content in the right pane, and the spark in the title bar. Below 32 px the amber line and the spark go, and the frame thickens. Lost: the spark says a model is at work, which Mado has none of, and a filled pane says less of a window that changed its size than the window shrunk.',
     subject(ctx, u, small) {
       const b = drawWindow(ctx, u, small);
       if (!small) {
@@ -270,8 +321,9 @@ function gradientCanvas(size, [from, to]) {
 }
 
 // The menu bar's template image, for a product with a menu bar item: the
-// subject as one black silhouette with one feature cut out of it, on a
-// transparent square, scaled to fill it. The system tints it for the bar,
+// subject in black, as a silhouette with one feature cut out of it or drawn
+// whole by the subject (`template`), on a transparent square, scaled to
+// fill it. The system tints it for the bar,
 // so only its alpha counts.
 function drawTemplate(canvas, px) {
   canvas.width = px; canvas.height = px;
@@ -280,6 +332,9 @@ function drawTemplate(canvas, px) {
   ctx.scale(px / 100, px / 100);
   ctx.translate(50, 50); ctx.scale(fit.k, fit.k); ctx.translate(-fit.x, -fit.y);
   ctx.fillStyle = ctx.strokeStyle = '#000'; ctx.lineWidth = 3; ctx.lineJoin = 'round';
+  // A subject that draws its image whole; else its silhouette, a feature
+  // cut out of it.
+  if (CHOSEN.template) { CHOSEN.template(ctx); return; }
   CHOSEN.silhouette(ctx);
   ctx.globalCompositeOperation = 'destination-out';
   CHOSEN.cut(ctx);

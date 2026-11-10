@@ -57,11 +57,11 @@ Sizes, in points: a section's name 15 semibold; a row's name 13; text in a contr
 
 ## The app icon
 
-The studio's manner (the cream ground with a fifth of the accent in it, navy lines, one amber stroke and the violet spark), drawn in `scripts/icon/icon.html` and rendered by `scripts/make-icon.sh --menubar`.
+The studio's manner (the cream ground with a fifth of the accent in it, navy lines, one amber stroke), drawn in `scripts/icon/icon.html` and rendered by `scripts/make-icon.sh --menubar`. Mado's icon has no violet spark, the one place it leaves the studio's manner: the spark is the mark of a model at work, and Mado has none.
 
-- **The subject is a window from the front, its left half put in place**: a white sheet in a navy frame, its title bar, a mullion down its middle, and the left pane filled with orchid's dark shade, the half a shortcut put it in. One amber line of content stands in the right pane, with a navy one under it, and the spark in the title bar. Below 32 pixels the amber line and the spark go and the frame thickens.
-- **Tried and dropped**: the window in thirds, its first third in orchid. At 32 pixels the three panes read as a table, and a third says less of Mado than a half. It is the page's second `VARIANT`.
-- **The menu bar's image** is the window as one black silhouette with its right pane hollowed, so the filled half is the half put in place.
+- **The subject is a window shrunk to its left half**: a white sheet in a navy frame, its title bar with three navy dots, orchid's dark shade under the title bar to the frame, standing on the left half of where it was. The whole window it was stays as a faint navy outline (28%), and one amber arrow points back from there to the half: a window Mado placed, and the size it changed. The frame and the arrow have the weights of the icon before it (2.8 and 4.2 in the 100-unit box). Below 32 pixels the dots go, the arrow is navy, and the frame thickens.
+- **The menu bar's image is the same drawing in one color**: the half solid, the outline of where it was at 40% (a template image keeps its alpha, and the system tints it), and the arrow. The candidate draws it whole (`template`), where the earlier ones were a silhouette with one feature cut out.
+- **Tried and dropped**: the window with its left pane in orchid and the spark in its title bar, the icon before this one (the spark says a model is at work, and a filled pane says less of a window that changed its size); the window in thirds (at 32 pixels the three panes read as a table); and, without the spark, a window in quarters with an arrow into the top left, a double arrow for resizing, a hooked arrow for Restore, a round window (丸窓) and two panes sliding over each other. The candidates before this one are in the page's `CANDIDATES`.
 
 ## The window
 
