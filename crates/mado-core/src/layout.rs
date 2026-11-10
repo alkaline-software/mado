@@ -350,6 +350,42 @@ pub struct Plan {
     pub crossed: bool,
 }
 
+/// Which of a frame's two parts is set first when a window is put at
+/// once: Accessibility sets a position and a size by two calls, and the
+/// screen may show the window between them.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum First {
+    /// Moved, then sized, then moved again where the size moved it.
+    Position,
+    /// Sized, then moved, then sized again where the app held the size back.
+    Size,
+}
+
+/// The order that keeps covered what the window covers before and after:
+/// a frame between the two that uncovered it showed what is behind the
+/// window for a moment, a flash (full screen to the right half, sized
+/// first, stood on the left half). A move is taken as it is asked, off
+/// the screen too; a size that would carry the window past `bounds` is
+/// held back there, as apps hold it, and the move after it stands at
+/// that size. The order whose frames between cover the most of both is
+/// taken, the move first where they cover alike, since a move does not
+/// redraw. Right half to the whole screen has no such order: the left
+/// edge cannot leave before the window is wide, nor the window widen
+/// before the left edge leaves.
+pub fn first(from: &Rect, to: &Rect, bounds: &Rect) -> First {
+    let both = {
+        let x = from.x.max(to.x);
+        let y = from.y.max(to.y);
+        Rect::new(x, y, (from.right().min(to.right()) - x).max(0.), (from.bottom().min(to.bottom()) - y).max(0.))
+    };
+    let kept = |between: &[Rect]| between.iter().map(|r| r.overlap(&both)).fold(f64::INFINITY, f64::min);
+    let moved = Rect::new(to.x, to.y, from.w, from.h);
+    let held = |size: f64, old: f64, at: f64, edge: f64| if size <= old { size } else { size.min((edge - at).max(old)) };
+    let sized = Rect::new(from.x, from.y, held(to.w, from.w, from.x, bounds.right()), held(to.h, from.h, from.y, bounds.bottom()));
+    let then_moved = Rect::new(to.x, to.y, sized.w, sized.h);
+    if kept(&[moved]) >= kept(&[sized, then_moved]) { First::Position } else { First::Size }
+}
+
 /// The frame a window takes once the app has had its say. An app may
 /// refuse a size (a least width, a terminal's cells): the window keeps
 /// the edges the plan put nearer the area's edges, so a right half that
@@ -542,6 +578,39 @@ impl Memory {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    /// The screen of the tests on the order of a frame's two calls: 2048
+    /// by 1045 under a menu bar of 30.
+    const WIDE: Rect = Rect::new(0., 30., 2048., 1045.);
+
+    #[test]
+    fn full_screen_to_the_right_half_is_moved_first_and_keeps_the_right_covered() {
+        let full = WIDE;
+        let right = Rect::new(1024., 30., 1024., 1045.);
+        assert_eq!(first(&full, &right, &WIDE), First::Position);
+    }
+
+    #[test]
+    fn a_window_grown_in_place_or_shrunk_in_place_is_moved_first() {
+        let left = Rect::new(0., 30., 1024., 1045.);
+        assert_eq!(first(&left, &WIDE, &WIDE), First::Position);
+        assert_eq!(first(&WIDE, &left, &WIDE), First::Position);
+    }
+
+    #[test]
+    fn the_right_half_to_the_whole_screen_has_no_order_without_a_gap_and_is_moved_first() {
+        let right = Rect::new(1024., 30., 1024., 1045.);
+        assert_eq!(first(&right, &WIDE, &WIDE), First::Position);
+    }
+
+    #[test]
+    fn a_small_window_left_of_the_middle_grows_where_it_is_before_it_moves() {
+        // Moved first, it would leave its place for the corner; sized
+        // first, it widens to the screen's edge, still over its place, and
+        // moved to the corner at that width it still covers it.
+        let small = Rect::new(300., 200., 600., 400.);
+        assert_eq!(first(&small, &WIDE, &WIDE), First::Size);
+    }
 
     /// A 1440 by 900 screen with a 25-point menu bar, and one to its right.
     fn one() -> Vec<Screen> {

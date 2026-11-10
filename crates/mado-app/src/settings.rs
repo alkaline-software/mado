@@ -472,7 +472,6 @@ impl Mado {
         let (shown, swapped) = (self.cfg.menu_bar.shown, self.cfg.menu_bar.swap);
         let in_bar = self.motion.switch("menu-bar", shown, Rc::new(move |this: &mut Self, on, _, cx| this.set_menu_bar(on, swapped, cx)), cx);
         let swap = self.motion.switch("swap", swapped, Rc::new(move |this: &mut Self, on, _, cx| this.set_menu_bar(shown, on, cx)), cx);
-        let animate = self.motion.switch("animate", self.cfg.app.animate, Rc::new(|this: &mut Self, on, _, cx| this.set_animate(on, cx)), cx);
         let looks = div().w(CONTROL_W).child(self.motion.segmented(
             "appearance",
             vec![("system", "icons/device-desktop.svg", t("System").into()), ("light", "icons/sun.svg", t("Light").into()), ("dark", "icons/moon.svg", t("Dark").into())],
@@ -501,7 +500,6 @@ impl Mado {
                     line(t("Open at login").into(), self.login_said.clone().map(SharedString::from), login, &theme),
                     line(t("Show in menu bar").into(), (!shown).then(|| SharedString::from(t("Open Mado again to see the settings."))), in_bar, &theme),
                     line(t("Swap clicks").into(), Some(swap_line.into()), swap, &theme),
-                    line(t("Animate windows").into(), None, animate, &theme),
                     line(t("Appearance").into(), None, looks.into_any_element(), &theme),
                 ],
                 &theme,

@@ -104,7 +104,6 @@ impl Mado {
     pub fn new(probe: bool, cx: &mut Context<Self>) -> Self {
         let ui = crate::ui_state::UiState::load();
         let cfg = Config::load();
-        crate::sys::set_animate(cfg.app.animate);
         let memory: Arc<Mutex<Memory>> = Arc::default();
         let snap = Arc::new(crate::sys::SnapState { on: std::sync::atomic::AtomicBool::new(false), how: Mutex::new(cfg.snapping.clone()), memory: memory.clone() });
         let mado = Self {
@@ -459,14 +458,6 @@ impl Mado {
             Err(e) => self.login_said = Some(e),
         }
         self.at_login = crate::sys::launches_at_login();
-        cx.notify();
-    }
-
-    /// Animate windows: carried to their places, or put there at once.
-    pub fn set_animate(&mut self, on: bool, cx: &mut Context<Self>) {
-        self.cfg.app.animate = on;
-        let _ = Config::edit(|c| c.app.animate = on);
-        crate::sys::set_animate(on);
         cx.notify();
     }
 
