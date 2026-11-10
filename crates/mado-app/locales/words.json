@@ -1,0 +1,776 @@
+{
+  "A click opens the settings; a right click, the menu.": {
+    "zh-Hans": "单击打开设置，右键点按显示菜单。",
+    "zh-Hant": "按一下打開設定，按右鍵顯示選單。",
+    "ja": "クリックで設定、右クリックでメニューを表示します。",
+    "ko": "클릭하면 설정이, 오른쪽 클릭하면 메뉴가 열립니다.",
+    "fr": "Un clic ouvre les réglages ; un clic droit, le menu.",
+    "de": "Ein Klick öffnet die Einstellungen, ein Rechtsklick das Menü.",
+    "es": "Un clic abre los ajustes; un clic derecho, el menú."
+  },
+  "A click shows the menu; a right click, the settings.": {
+    "zh-Hans": "单击显示菜单，右键点按打开设置。",
+    "zh-Hant": "按一下顯示選單，按右鍵打開設定。",
+    "ja": "クリックでメニュー、右クリックで設定を表示します。",
+    "ko": "클릭하면 메뉴가, 오른쪽 클릭하면 설정이 열립니다.",
+    "fr": "Un clic affiche le menu ; un clic droit, les réglages.",
+    "de": "Ein Klick zeigt das Menü, ein Rechtsklick die Einstellungen.",
+    "es": "Un clic muestra el menú; un clic derecho, los ajustes."
+  },
+  "A quarter of the screen": {
+    "zh-Hans": "四分之一屏幕",
+    "zh-Hant": "四分之一螢幕",
+    "ja": "画面の4分の1",
+    "ko": "화면의 4분의 1",
+    "fr": "Un quart de l’écran",
+    "de": "Ein Viertel des Bildschirms",
+    "es": "Un cuarto de la pantalla"
+  },
+  "About": {
+    "zh-Hans": "关于",
+    "zh-Hant": "關於",
+    "ja": "情報",
+    "ko": "정보",
+    "fr": "À propos",
+    "de": "Über",
+    "es": "Acerca de"
+  },
+  "About Mado": {
+    "zh-Hans": "关于 Mado",
+    "zh-Hant": "關於 Mado",
+    "ja": "Mado について",
+    "ko": "Mado에 관하여",
+    "fr": "À propos de Mado",
+    "de": "Über Mado",
+    "es": "Acerca de Mado"
+  },
+  "Accessibility": {
+    "zh-Hans": "辅助功能",
+    "zh-Hant": "輔助使用",
+    "ja": "アクセシビリティ",
+    "ko": "손쉬운 사용",
+    "fr": "Accessibilité",
+    "de": "Bedienungshilfen",
+    "es": "Accesibilidad"
+  },
+  "Actions": {
+    "zh-Hans": "操作",
+    "zh-Hant": "操作",
+    "ja": "操作",
+    "ko": "동작",
+    "fr": "Actions",
+    "de": "Aktionen",
+    "es": "Acciones"
+  },
+  "Allow": {
+    "zh-Hans": "允许",
+    "zh-Hant": "允許",
+    "ja": "許可",
+    "ko": "허용",
+    "fr": "Autoriser",
+    "de": "Erlauben",
+    "es": "Permitir"
+  },
+  "Allowed": {
+    "zh-Hans": "已允许",
+    "zh-Hant": "已允許",
+    "ja": "許可済み",
+    "ko": "허용됨",
+    "fr": "Autorisé",
+    "de": "Erlaubt",
+    "es": "Permitido"
+  },
+  "Almost Maximize": {
+    "zh-Hans": "接近最大化",
+    "zh-Hant": "接近最大化",
+    "ja": "ほぼ最大化",
+    "ko": "거의 최대화",
+    "fr": "Presque agrandir",
+    "de": "Fast maximieren",
+    "es": "Casi maximizar"
+  },
+  "Appearance": {
+    "zh-Hans": "外观",
+    "zh-Hant": "外觀",
+    "ja": "外観",
+    "ko": "화면 모드",
+    "fr": "Apparence",
+    "de": "Erscheinungsbild",
+    "es": "Apariencia"
+  },
+  "Bottom Half": {
+    "zh-Hans": "下半边",
+    "zh-Hant": "下半邊",
+    "ja": "下半分",
+    "ko": "아래쪽 절반",
+    "fr": "Moitié inférieure",
+    "de": "Untere Hälfte",
+    "es": "Mitad inferior"
+  },
+  "Bottom Left": {
+    "zh-Hans": "左下",
+    "zh-Hant": "左下",
+    "ja": "左下",
+    "ko": "왼쪽 아래",
+    "fr": "En bas à gauche",
+    "de": "Unten links",
+    "es": "Abajo a la izquierda"
+  },
+  "Bottom Right": {
+    "zh-Hans": "右下",
+    "zh-Hant": "右下",
+    "ja": "右下",
+    "ko": "오른쪽 아래",
+    "fr": "En bas à droite",
+    "de": "Unten rechts",
+    "es": "Abajo a la derecha"
+  },
+  "Center": {
+    "zh-Hans": "居中",
+    "zh-Hant": "置中",
+    "ja": "中央",
+    "ko": "가운데",
+    "fr": "Centrer",
+    "de": "Zentrieren",
+    "es": "Centrar"
+  },
+  "Check automatically": {
+    "zh-Hans": "自动检查",
+    "zh-Hant": "自動檢查",
+    "ja": "自動的に確認",
+    "ko": "자동으로 확인",
+    "fr": "Rechercher automatiquement",
+    "de": "Automatisch suchen",
+    "es": "Buscar automáticamente"
+  },
+  "Check for updates": {
+    "zh-Hans": "检查更新",
+    "zh-Hant": "檢查更新",
+    "ja": "アップデートを確認",
+    "ko": "업데이트 확인",
+    "fr": "Rechercher les mises à jour",
+    "de": "Nach Updates suchen",
+    "es": "Buscar actualizaciones"
+  },
+  "Clear": {
+    "zh-Hans": "清除",
+    "zh-Hant": "清除",
+    "ja": "消去",
+    "ko": "지우기",
+    "fr": "Effacer",
+    "de": "Löschen",
+    "es": "Borrar"
+  },
+  "Clear All": {
+    "zh-Hans": "全部清除",
+    "zh-Hant": "全部清除",
+    "ja": "すべて消去",
+    "ko": "모두 지우기",
+    "fr": "Tout effacer",
+    "de": "Alle löschen",
+    "es": "Borrar todo"
+  },
+  "Close Window": {
+    "zh-Hans": "关闭窗口",
+    "zh-Hant": "關閉視窗",
+    "ja": "ウインドウを閉じる",
+    "ko": "윈도우 닫기",
+    "fr": "Fermer la fenêtre",
+    "de": "Fenster schließen",
+    "es": "Cerrar ventana"
+  },
+  "Corners": {
+    "zh-Hans": "角落",
+    "zh-Hant": "角落",
+    "ja": "四隅",
+    "ko": "모서리",
+    "fr": "Coins",
+    "de": "Ecken",
+    "es": "Esquinas"
+  },
+  "Dark": {
+    "zh-Hans": "深色",
+    "zh-Hant": "深色",
+    "ja": "ダーク",
+    "ko": "다크",
+    "fr": "Sombre",
+    "de": "Dunkel",
+    "es": "Oscuro"
+  },
+  "Displays": {
+    "zh-Hans": "显示器",
+    "zh-Hant": "顯示器",
+    "ja": "ディスプレイ",
+    "ko": "디스플레이",
+    "fr": "Moniteurs",
+    "de": "Displays",
+    "es": "Pantallas"
+  },
+  "Downloading… {percent}%": {
+    "zh-Hans": "正在下载… {percent}%",
+    "zh-Hant": "正在下載… {percent}%",
+    "ja": "ダウンロード中… {percent}%",
+    "ko": "다운로드 중… {percent}%",
+    "fr": "Téléchargement… {percent} %",
+    "de": "Lädt … {percent} %",
+    "es": "Descargando… {percent} %"
+  },
+  "Edges": {
+    "zh-Hans": "贴边",
+    "zh-Hant": "貼邊",
+    "ja": "端",
+    "ko": "가장자리",
+    "fr": "Bords",
+    "de": "Ränder",
+    "es": "Bordes"
+  },
+  "File": {
+    "zh-Hans": "文件",
+    "zh-Hant": "檔案",
+    "ja": "ファイル",
+    "ko": "파일",
+    "fr": "Fichier",
+    "de": "Ablage",
+    "es": "Archivo"
+  },
+  "General": {
+    "zh-Hans": "通用",
+    "zh-Hant": "一般",
+    "ja": "一般",
+    "ko": "일반",
+    "fr": "Général",
+    "de": "Allgemein",
+    "es": "General"
+  },
+  "Halves; near a corner, the top or bottom half": {
+    "zh-Hans": "半屏；近角落时为上或下半屏",
+    "zh-Hant": "半屏；近角落時為上或下半屏",
+    "ja": "半分。角の近くでは上半分か下半分",
+    "ko": "절반, 모서리 근처에서는 위쪽 또는 아래쪽 절반",
+    "fr": "Moitiés ; près d’un coin, la moitié haute ou basse",
+    "de": "Hälften; nahe einer Ecke die obere oder untere Hälfte",
+    "es": "Mitades; cerca de una esquina, arriba o abajo"
+  },
+  "Hide Mado": {
+    "zh-Hans": "隐藏 Mado",
+    "zh-Hant": "隱藏 Mado",
+    "ja": "Mado を非表示",
+    "ko": "Mado 가리기",
+    "fr": "Masquer Mado",
+    "de": "Mado ausblenden",
+    "es": "Ocultar Mado"
+  },
+  "Hide Others": {
+    "zh-Hans": "隐藏其他",
+    "zh-Hant": "隱藏其他",
+    "ja": "ほかを非表示",
+    "ko": "기타 가리기",
+    "fr": "Masquer les autres",
+    "de": "Andere ausblenden",
+    "es": "Ocultar otros"
+  },
+  "Hold ⌘, ⌥ or ⌃ with the key": {
+    "zh-Hans": "按住 ⌘、⌥ 或 ⌃ 再按键",
+    "zh-Hant": "按住 ⌘、⌥ 或 ⌃ 再按鍵",
+    "ja": "⌘、⌥、⌃ のどれかを押しながらキーを押してください",
+    "ko": "⌘, ⌥ 또는 ⌃를 누른 채로 키를 누르십시오",
+    "fr": "Maintenez ⌘, ⌥ ou ⌃ avec la touche",
+    "de": "⌘, ⌥ oder ⌃ mit der Taste halten",
+    "es": "Mantén ⌘, ⌥ o ⌃ con la tecla"
+  },
+  "Ignore {app}": {
+    "zh-Hans": "忽略“{app}”",
+    "zh-Hant": "忽略「{app}」",
+    "ja": "「{app}」を無視",
+    "ko": "‘{app}’ 무시",
+    "fr": "Ignorer « {app} »",
+    "de": "„{app}“ ignorieren",
+    "es": "Ignorar «{app}»"
+  },
+  "Larger": {
+    "zh-Hans": "放大",
+    "zh-Hant": "放大",
+    "ja": "大きく",
+    "ko": "크게",
+    "fr": "Plus grand",
+    "de": "Größer",
+    "es": "Más grande"
+  },
+  "Left and right edges": {
+    "zh-Hans": "左右边缘",
+    "zh-Hant": "左右邊緣",
+    "ja": "左右の端",
+    "ko": "왼쪽과 오른쪽 가장자리",
+    "fr": "Bords gauche et droit",
+    "de": "Linker und rechter Rand",
+    "es": "Bordes izquierdo y derecho"
+  },
+  "Left Half": {
+    "zh-Hans": "左半边",
+    "zh-Hant": "左半邊",
+    "ja": "左半分",
+    "ko": "왼쪽 절반",
+    "fr": "Moitié gauche",
+    "de": "Linke Hälfte",
+    "es": "Mitad izquierda"
+  },
+  "Lets Mado move and size other apps’ windows.": {
+    "zh-Hans": "让 Mado 移动其他 App 的窗口并调整大小。",
+    "zh-Hant": "讓 Mado 移動其他 App 的視窗並調整大小。",
+    "ja": "Mado が他のアプリのウインドウを移動し、サイズを変えられるようにします。",
+    "ko": "Mado가 다른 앱의 윈도우를 이동하고 크기를 조절할 수 있게 합니다.",
+    "fr": "Permet à Mado de déplacer et redimensionner les fenêtres des autres apps.",
+    "de": "Erlaubt Mado, die Fenster anderer Apps zu bewegen und ihre Größe zu ändern.",
+    "es": "Permite a Mado mover y redimensionar las ventanas de otras apps."
+  },
+  "Light": {
+    "zh-Hans": "浅色",
+    "zh-Hant": "淺色",
+    "ja": "ライト",
+    "ko": "라이트",
+    "fr": "Clair",
+    "de": "Hell",
+    "es": "Claro"
+  },
+  "macOS tiling": {
+    "zh-Hans": "系统平铺",
+    "zh-Hant": "系統並排",
+    "ja": "macOS のタイル表示",
+    "ko": "macOS 타일 배치",
+    "fr": "Mosaïque de macOS",
+    "de": "Kacheln von macOS",
+    "es": "Mosaico de macOS"
+  },
+  "Maximize": {
+    "zh-Hans": "最大化",
+    "zh-Hant": "最大化",
+    "ja": "最大化",
+    "ko": "최대화",
+    "fr": "Agrandir",
+    "de": "Maximieren",
+    "es": "Maximizar"
+  },
+  "Maximize Height": {
+    "zh-Hans": "最大高度",
+    "zh-Hant": "最大高度",
+    "ja": "高さを最大化",
+    "ko": "높이 최대화",
+    "fr": "Agrandir en hauteur",
+    "de": "Höhe maximieren",
+    "es": "Maximizar altura"
+  },
+  "Minimize": {
+    "zh-Hans": "最小化",
+    "zh-Hant": "縮到最小",
+    "ja": "しまう",
+    "ko": "최소화",
+    "fr": "Placer dans le Dock",
+    "de": "Im Dock ablegen",
+    "es": "Minimizar"
+  },
+  "Next Display": {
+    "zh-Hans": "下一个显示器",
+    "zh-Hant": "下一個顯示器",
+    "ja": "次のディスプレイ",
+    "ko": "다음 디스플레이",
+    "fr": "Moniteur suivant",
+    "de": "Nächstes Display",
+    "es": "Pantalla siguiente"
+  },
+  "None": {
+    "zh-Hans": "无",
+    "zh-Hant": "無",
+    "ja": "なし",
+    "ko": "없음",
+    "fr": "Aucun",
+    "de": "Ohne",
+    "es": "Ninguno"
+  },
+  "Off": {
+    "zh-Hans": "已关闭",
+    "zh-Hant": "已關閉",
+    "ja": "オフ",
+    "ko": "끔",
+    "fr": "Désactivée",
+    "de": "Aus",
+    "es": "Desactivado"
+  },
+  "On": {
+    "zh-Hans": "已开启",
+    "zh-Hant": "已開啟",
+    "ja": "オン",
+    "ko": "켬",
+    "fr": "Activée",
+    "de": "An",
+    "es": "Activado"
+  },
+  "Open at login": {
+    "zh-Hans": "登录时打开",
+    "zh-Hant": "登入時打開",
+    "ja": "ログイン時に開く",
+    "ko": "로그인 시 열기",
+    "fr": "Ouvrir à la connexion",
+    "de": "Beim Anmelden öffnen",
+    "es": "Abrir al iniciar sesión"
+  },
+  "Open Mado again to see the settings.": {
+    "zh-Hans": "再次打开 Mado 即可看到设置。",
+    "zh-Hant": "再次打開 Mado 即可看到設定。",
+    "ja": "設定は Mado をもう一度開くと表示されます。",
+    "ko": "설정을 보려면 Mado를 다시 여십시오.",
+    "fr": "Rouvrez Mado pour voir les réglages.",
+    "de": "Mado erneut öffnen, um die Einstellungen zu sehen.",
+    "es": "Vuelve a abrir Mado para ver los ajustes."
+  },
+  "Open System Settings": {
+    "zh-Hans": "打开系统设置",
+    "zh-Hant": "打開系統設定",
+    "ja": "システム設定を開く",
+    "ko": "시스템 설정 열기",
+    "fr": "Ouvrir Réglages Système",
+    "de": "Systemeinstellungen öffnen",
+    "es": "Abrir Ajustes del Sistema"
+  },
+  "Press keys…": {
+    "zh-Hans": "请按下按键…",
+    "zh-Hant": "請按下按鍵…",
+    "ja": "キーを押してください…",
+    "ko": "키를 누르십시오…",
+    "fr": "Appuyez sur des touches…",
+    "de": "Tasten drücken …",
+    "es": "Pulsa las teclas…"
+  },
+  "Previous Display": {
+    "zh-Hans": "上一个显示器",
+    "zh-Hant": "上一個顯示器",
+    "ja": "前のディスプレイ",
+    "ko": "이전 디스플레이",
+    "fr": "Moniteur précédent",
+    "de": "Vorheriges Display",
+    "es": "Pantalla anterior"
+  },
+  "Quit Mado": {
+    "zh-Hans": "退出 Mado",
+    "zh-Hant": "結束 Mado",
+    "ja": "Mado を終了",
+    "ko": "Mado 종료",
+    "fr": "Quitter Mado",
+    "de": "Mado beenden",
+    "es": "Salir de Mado"
+  },
+  "Release Notes": {
+    "zh-Hans": "更新说明",
+    "zh-Hant": "更新說明",
+    "ja": "リリースノート",
+    "ko": "릴리스 노트",
+    "fr": "Notes de version",
+    "de": "Versionshinweise",
+    "es": "Notas de la versión"
+  },
+  "Restore": {
+    "zh-Hans": "还原",
+    "zh-Hant": "還原",
+    "ja": "元に戻す",
+    "ko": "복원",
+    "fr": "Restaurer",
+    "de": "Wiederherstellen",
+    "es": "Restaurar"
+  },
+  "Restore Defaults": {
+    "zh-Hans": "恢复默认",
+    "zh-Hant": "回復預設值",
+    "ja": "デフォルトに戻す",
+    "ko": "기본값으로 복원",
+    "fr": "Valeurs par défaut",
+    "de": "Standard wiederherstellen",
+    "es": "Restaurar valores"
+  },
+  "Right Half": {
+    "zh-Hans": "右半边",
+    "zh-Hant": "右半邊",
+    "ja": "右半分",
+    "ko": "오른쪽 절반",
+    "fr": "Moitié droite",
+    "de": "Rechte Hälfte",
+    "es": "Mitad derecha"
+  },
+  "Settings": {
+    "zh-Hans": "设置",
+    "zh-Hant": "設定",
+    "ja": "設定",
+    "ko": "설정",
+    "fr": "Réglages",
+    "de": "Einstellungen",
+    "es": "Ajustes"
+  },
+  "Settings…": {
+    "zh-Hans": "设置…",
+    "zh-Hant": "設定…",
+    "ja": "設定…",
+    "ko": "설정…",
+    "fr": "Réglages…",
+    "de": "Einstellungen …",
+    "es": "Ajustes…"
+  },
+  "Shortcuts": {
+    "zh-Hans": "快捷键",
+    "zh-Hant": "快速鍵",
+    "ja": "ショートカット",
+    "ko": "단축키",
+    "fr": "Raccourcis",
+    "de": "Kurzbefehle",
+    "es": "Atajos"
+  },
+  "Show All": {
+    "zh-Hans": "全部显示",
+    "zh-Hant": "顯示全部",
+    "ja": "すべてを表示",
+    "ko": "모두 보기",
+    "fr": "Tout afficher",
+    "de": "Alle einblenden",
+    "es": "Mostrar todo"
+  },
+  "Show in menu bar": {
+    "zh-Hans": "在菜单栏中显示",
+    "zh-Hant": "在選單列中顯示",
+    "ja": "メニューバーに表示",
+    "ko": "메뉴 막대에 표시",
+    "fr": "Afficher dans la barre des menus",
+    "de": "In der Menüleiste anzeigen",
+    "es": "Mostrar en la barra de menús"
+  },
+  "Size": {
+    "zh-Hans": "大小",
+    "zh-Hant": "大小",
+    "ja": "サイズ",
+    "ko": "크기",
+    "fr": "Taille",
+    "de": "Größe",
+    "es": "Tamaño"
+  },
+  "Smaller": {
+    "zh-Hans": "缩小",
+    "zh-Hant": "縮小",
+    "ja": "小さく",
+    "ko": "작게",
+    "fr": "Plus petit",
+    "de": "Kleiner",
+    "es": "Más pequeño"
+  },
+  "Snap Areas": {
+    "zh-Hans": "吸附区域",
+    "zh-Hant": "吸附區域",
+    "ja": "吸着エリア",
+    "ko": "맞춤 영역",
+    "fr": "Zones d’aimantation",
+    "de": "Einrastbereiche",
+    "es": "Zonas de ajuste"
+  },
+  "Still on": {
+    "zh-Hans": "尚未关闭",
+    "zh-Hant": "尚未關閉",
+    "ja": "オンのまま",
+    "ko": "아직 켜짐",
+    "fr": "Encore activée",
+    "de": "Noch an",
+    "es": "Aún activado"
+  },
+  "Swap clicks": {
+    "zh-Hans": "互换左右键",
+    "zh-Hant": "互換左右鍵",
+    "ja": "クリックを入れ替える",
+    "ko": "클릭 바꾸기",
+    "fr": "Inverser les clics",
+    "de": "Klicks tauschen",
+    "es": "Intercambiar clics"
+  },
+  "System": {
+    "zh-Hans": "跟随系统",
+    "zh-Hant": "跟隨系統",
+    "ja": "システム",
+    "ko": "시스템",
+    "fr": "Système",
+    "de": "System",
+    "es": "Sistema"
+  },
+  "Taken from {action}": {
+    "zh-Hans": "已从“{action}”移来",
+    "zh-Hant": "已從「{action}」移來",
+    "ja": "「{action}」から移しました",
+    "ko": "‘{action}’에서 옮겨 왔습니다",
+    "fr": "Retiré de « {action} »",
+    "de": "Von „{action}“ übernommen",
+    "es": "Quitado de «{action}»"
+  },
+  "That key can't be used": {
+    "zh-Hans": "这个键不能用",
+    "zh-Hant": "這個鍵不能用",
+    "ja": "このキーは使えません",
+    "ko": "이 키는 사용할 수 없습니다",
+    "fr": "Cette touche ne peut pas servir",
+    "de": "Diese Taste geht nicht",
+    "es": "Esa tecla no sirve"
+  },
+  "The check did not go through: {why}": {
+    "zh-Hans": "检查未完成：{why}",
+    "zh-Hant": "檢查未完成：{why}",
+    "ja": "確認できませんでした：{why}",
+    "ko": "확인하지 못했습니다: {why}",
+    "fr": "La vérification a échoué : {why}",
+    "de": "Die Prüfung ist fehlgeschlagen: {why}",
+    "es": "La comprobación no se completó: {why}"
+  },
+  "The system did not take this shortcut.": {
+    "zh-Hans": "系统未接受此快捷键。",
+    "zh-Hant": "系統未接受此快速鍵。",
+    "ja": "システムがこのショートカットを受け付けませんでした。",
+    "ko": "시스템이 이 단축키를 받아들이지 않았습니다.",
+    "fr": "Le système n’a pas accepté ce raccourci.",
+    "de": "Das System hat diesen Kurzbefehl nicht angenommen.",
+    "es": "El sistema no aceptó este atajo."
+  },
+  "The update did not go through: {e}": {
+    "zh-Hans": "更新未完成：{e}",
+    "zh-Hant": "更新未完成：{e}",
+    "ja": "アップデートできませんでした：{e}",
+    "ko": "업데이트하지 못했습니다: {e}",
+    "fr": "La mise à jour a échoué : {e}",
+    "de": "Das Update ist fehlgeschlagen: {e}",
+    "es": "La actualización no se completó: {e}"
+  },
+  "Tile in a Grid": {
+    "zh-Hans": "矩阵排布窗口",
+    "zh-Hant": "矩陣排列視窗",
+    "ja": "グリッドに並べる",
+    "ko": "격자로 배열",
+    "fr": "Mosaïque en grille",
+    "de": "Im Raster anordnen",
+    "es": "Organizar en cuadrícula"
+  },
+  "Tile in Columns": {
+    "zh-Hans": "按列平铺窗口",
+    "zh-Hant": "依欄並排視窗",
+    "ja": "列に並べる",
+    "ko": "열로 배열",
+    "fr": "Mosaïque en colonnes",
+    "de": "In Spalten anordnen",
+    "es": "Organizar en columnas"
+  },
+  "Tile in Rows": {
+    "zh-Hans": "按行平铺窗口",
+    "zh-Hant": "依列並排視窗",
+    "ja": "行に並べる",
+    "ko": "행으로 배열",
+    "fr": "Mosaïque en lignes",
+    "de": "In Zeilen anordnen",
+    "es": "Organizar en filas"
+  },
+  "To avoid conflicts, turn off macOS tiling.": {
+    "zh-Hans": "为了避免冲突，建议关闭系统内置的平铺功能。",
+    "zh-Hant": "為了避免衝突，建議關閉系統內建的並排功能。",
+    "ja": "競合を避けるため、タイル表示はオフにしてください。",
+    "ko": "충돌을 피하려면 macOS 기본 타일 배치를 끄는 것이 좋습니다.",
+    "fr": "Pour éviter les conflits, désactivez la mosaïque intégrée de macOS.",
+    "de": "Um Konflikte zu vermeiden, schalten Sie das Kacheln von macOS aus.",
+    "es": "Para evitar conflictos, desactiva el mosaico integrado de macOS."
+  },
+  "Top edge": {
+    "zh-Hans": "顶部边缘",
+    "zh-Hant": "頂部邊緣",
+    "ja": "上端",
+    "ko": "위쪽 가장자리",
+    "fr": "Bord supérieur",
+    "de": "Oberer Rand",
+    "es": "Borde superior"
+  },
+  "Top Half": {
+    "zh-Hans": "上半边",
+    "zh-Hant": "上半邊",
+    "ja": "上半分",
+    "ko": "위쪽 절반",
+    "fr": "Moitié supérieure",
+    "de": "Obere Hälfte",
+    "es": "Mitad superior"
+  },
+  "Top Left": {
+    "zh-Hans": "左上",
+    "zh-Hant": "左上",
+    "ja": "左上",
+    "ko": "왼쪽 위",
+    "fr": "En haut à gauche",
+    "de": "Oben links",
+    "es": "Arriba a la izquierda"
+  },
+  "Top Right": {
+    "zh-Hans": "右上",
+    "zh-Hant": "右上",
+    "ja": "右上",
+    "ko": "오른쪽 위",
+    "fr": "En haut à droite",
+    "de": "Oben rechts",
+    "es": "Arriba a la derecha"
+  },
+  "Up to date.": {
+    "zh-Hans": "已是最新版本。",
+    "zh-Hant": "已是最新版本。",
+    "ja": "最新です。",
+    "ko": "최신 버전입니다.",
+    "fr": "À jour.",
+    "de": "Auf dem neuesten Stand.",
+    "es": "Está al día."
+  },
+  "Update to {version}": {
+    "zh-Hans": "更新到 {version}",
+    "zh-Hant": "更新到 {version}",
+    "ja": "{version} にアップデート",
+    "ko": "{version}(으)로 업데이트",
+    "fr": "Passer à la {version}",
+    "de": "Auf {version} aktualisieren",
+    "es": "Actualizar a {version}"
+  },
+  "Updates": {
+    "zh-Hans": "更新",
+    "zh-Hant": "更新",
+    "ja": "アップデート",
+    "ko": "업데이트",
+    "fr": "Mises à jour",
+    "de": "Updates",
+    "es": "Actualizaciones"
+  },
+  "Version {version}": {
+    "zh-Hans": "版本 {version}",
+    "zh-Hant": "版本 {version}",
+    "ja": "バージョン {version}",
+    "ko": "버전 {version}",
+    "fr": "Version {version}",
+    "de": "Version {version}",
+    "es": "Versión {version}"
+  },
+  "Website": {
+    "zh-Hans": "网站",
+    "zh-Hant": "網站",
+    "ja": "Web サイト",
+    "ko": "웹사이트",
+    "fr": "Site web",
+    "de": "Website",
+    "es": "Sitio web"
+  },
+  "Window": {
+    "zh-Hans": "窗口",
+    "zh-Hant": "視窗",
+    "ja": "ウインドウ",
+    "ko": "윈도우",
+    "fr": "Fenêtre",
+    "de": "Fenster",
+    "es": "Ventana"
+  },
+  "{studio} presents": {
+    "zh-Hans": "{studio} 出品",
+    "zh-Hant": "{studio} 出品",
+    "ja": "{studio} 提供",
+    "ko": "{studio} 제공",
+    "fr": "{studio} présente",
+    "de": "{studio} präsentiert",
+    "es": "{studio} presenta"
+  }
+}

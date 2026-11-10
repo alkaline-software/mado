@@ -1,0 +1,84 @@
+[package]
+name = "mado-app"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+# The binary's name is what macOS shows in the menu bar and the Dock for a bare binary.
+[[bin]]
+name = "Mado"
+path = "src/main.rs"
+
+[dependencies]
+mado-core = { path = "../mado-core" }
+anyhow.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+# The zed revision is pinned in Cargo.lock (cargo update -p gpui --precise <rev>).
+# gpui-component depends on the unpinned zed source, so a `rev` here would
+# make a second copy of gpui that it does not build against.
+gpui = { git = "https://github.com/zed-industries/zed" }
+gpui_platform = { git = "https://github.com/zed-industries/zed", features = ["font-kit", "x11", "wayland", "runtime_shaders"] }
+gpui-component = { git = "https://github.com/longbridge/gpui-component", rev = "fd3bc2bbb8a2c4dfe268c1475682476ada54cd0c" }
+gpui-component-assets = { git = "https://github.com/longbridge/gpui-component", rev = "fd3bc2bbb8a2c4dfe268c1475682476ada54cd0c" }
+# The window's text selection layer, to end a drag a swallowed click would leave open.
+gpui-base = { git = "https://github.com/longbridge/gpui-component", rev = "fd3bc2bbb8a2c4dfe268c1475682476ada54cd0c" }
+# The icons and the app's own pictures, built into the binary.
+rust-embed = { version = "8", features = ["debug-embed", "include-exclude"] }
+# Open a file or a link with the system's own app, without shelling out.
+opener = "0.7"
+# The system's preferred languages, for the window's (`i18n::pick`).
+sys-locale = "0.3"
+dirs.workspace = true
+# The channels the system's callbacks (a hot key, the menu bar item, a
+# key recorded) hand their news to the app down.
+futures = "0.3"
+
+[target.'cfg(windows)'.dependencies]
+# Velopack's installer runs the app with a hook to answer at start (`main`).
+velopack = "=1.2.161"
+
+[target.'cfg(windows)'.build-dependencies]
+winresource = "0.1"
+
+[target.'cfg(target_os = "macos")'.dependencies]
+objc2 = "0.6"
+block2 = "0.6"
+objc2-app-kit = { version = "0.3", features = ["NSView", "NSWindow", "NSResponder", "NSApplication", "NSImage", "NSImageRep", "NSBitmapImageRep", "NSColor", "NSScreen", "NSEvent", "NSRunningApplication", "NSStatusBar", "NSStatusItem", "NSStatusBarButton", "NSButton", "NSControl", "NSMenu", "NSMenuItem", "NSWorkspace", "NSBox", "NSAnimation", "NSAnimationContext", "NSGraphics", "NSVisualEffectView"] }
+objc2-foundation = { version = "0.3", features = ["NSData", "NSString", "NSArray", "NSDictionary", "NSUserDefaults", "NSBundle", "NSGeometry", "NSValue", "NSError", "NSNotification", "NSDistributedNotificationCenter", "NSOperation", "NSProcessInfo"] }
+# Launch at login, kept by the system (`sys::set_launch_at_login`).
+objc2-service-management = { version = "0.3", features = ["SMAppService"] }
+# The menu bar item's icons, drawn from the same SVGs the window draws,
+# by the resvg gpui already builds.
+resvg = "0.46"
+raw-window-handle = "0.6"
+
+# Installers: `cargo packager --release` (cargo-packager) wraps the app for
+# Linux and is the bundle's base on macOS. release.yml passes `--formats`
+# per system and renames the results to the stable names. No signing
+# identity is set here: the macOS bundle is signed afterwards by
+# scripts/release-mac.sh, and Windows is packed and signed by Velopack.
+[package.metadata.packager]
+productName = "Mado"
+authors = ["Alkaline Software"]
+publisher = "Alkaline Software"
+identifier = "com.alkalinesoftware.mado"
+description = "Move and size windows from the keyboard."
+longDescription = "Mado puts the window in front where a shortcut says: a half, a corner, a third, the whole screen, the next display."
+homepage = "https://github.com/alkaline-software/mado"
+licenseFile = "../../LICENSE"
+category = "Utility"
+icons = ["assets/icon/icon.icns", "assets/icon/icon.ico", "assets/icon/icon-*.png"]
+outDir = "../../dist"
+binaries = [{ path = "Mado", main = true }]
+
+[package.metadata.packager.macos]
+minimumSystemVersion = "14.0"
+# Merged into the bundle's Info.plist: LSUIElement, so there is no Dock
+# icon (gpui makes the app a regular one as it starts, and
+# `sys::stay_in_menu_bar` says it again), and the languages the window
+# speaks, so System Settings, Language & Region, Applications offers each.
+infoPlistPath = "macos/Info.plist"
+
+[package.metadata.packager.deb]
+depends = ["libxkbcommon0", "libxkbcommon-x11-0", "libwayland-client0", "libvulkan1", "libfontconfig1", "libfreetype6", "libx11-xcb1", "libxcb1"]

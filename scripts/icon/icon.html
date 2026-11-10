@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Mado App Icon</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    width: 1280px; padding: 40px;
+    background: #f3f2f0; color: #1c1c1e;
+    font-family: -apple-system, "SF Pro Text", "Helvetica Neue", sans-serif;
+  }
+  h1 { font-size: 22px; font-weight: 700; margin-bottom: 24px; }
+  .card {
+    background: #fff; border: 1px solid #e4e2de; border-radius: 16px;
+    padding: 36px 44px; margin-bottom: 22px;
+    display: flex; align-items: center; gap: 56px;
+  }
+  .card h2 { font-size: 18px; font-weight: 700; margin-bottom: 14px; }
+  .card p { font-size: 14px; color: #5c5c62; margin-bottom: 22px; line-height: 1.5; max-width: 760px; }
+  .sizes { display: flex; align-items: flex-end; gap: 30px; }
+  .sizes figure { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .sizes figcaption { font-size: 12px; color: #5c5c62; }
+  .sizes .gap { width: 16px; }
+  canvas { display: block; }
+  .zoom { image-rendering: pixelated; }
+  .usage { align-items: center; }
+  .usage .label { width: 300px; flex: none; }
+  .usage .label h2 { margin-bottom: 10px; }
+  .usage .label p { margin: 0; }
+  .bars { display: flex; flex-direction: column; gap: 16px; }
+  .bar { display: flex; gap: 20px; padding: 22px 24px; border-radius: 18px; }
+  .bar.dark { background: #1f2024; color: #f2f2f4; }
+  .bar.light { background: #eceae6; border: 1px solid #dcd9d3; }
+  .org { display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 600; }
+  .org canvas { border-radius: 8px; }
+  .org canvas.template { border-radius: 0; margin-left: 24px; }
+  .bar.dark canvas.template { filter: invert(1); }
+</style>
+</head>
+<body>
+<h1>Mado App Icon</h1>
+<div id="cards"></div>
+<div class="card usage">
+  <div class="label">
+    <h2>Beside its name</h2>
+    <p>Drawn at 48 px as a full square. The host rounds the corners. At the end, the menu bar's template image at 18 pt, tinted as the system tints it.</p>
+  </div>
+  <div class="bars">
+    <div class="bar dark" id="bar-dark"></div>
+    <div class="bar light" id="bar-light"></div>
+  </div>
+</div>
+
+<script>
+// The icon is drawn in a 100-unit box. `bleed` fills the whole canvas as a
+// square, opaque to its corners: the .icns, since macOS masks every app icon
+// to its own rounded square and shows anything transparent as a gray border.
+// Otherwise the body is an inset squircle with a margin and a shadow: the
+// PNGs the window and the site show.
+//
+// The navy, the amber and the violet spark are the studio's and the same in
+// every icon. ACCENT is the product's accent at its dark shade, in the one
+// place the subject has for a color of its own. The ground is the studio's
+// cream with a fifth of the accent in it (`ground`): ACCENT_LIGHT and
+// ACCENT_DARK are the accent's base shades in the two appearances
+// (docs/design.md, The accents), and a product sets all three to its own.
+const NAVY = '#2b2556', AMBER = '#ffb83e', VIOLET = '#6a3fd9', ACCENT = '#c498d2';
+const ACCENT_LIGHT = '#845293', ACCENT_DARK = '#C498D2';
+const CREAM = ['#fdf8ee', '#f1e4d0'];   // the studio's ground, top left to bottom right
+
+// The ground with the accent in it: each end of the cream mixed with the
+// mean of the accent's two base shades, 16% at the top left and 24% at the
+// bottom right, so the wash deepens toward the shadowed corner.
+function ground(light = ACCENT_LIGHT, dark = ACCENT_DARK) {
+  const rgb = hex => [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16));
+  const hex = c => '#' + c.map(v => Math.round(Math.max(0, Math.min(255, v))).toString(16).padStart(2, '0')).join('');
+  const [l, d] = [rgb(light), rgb(dark)];
+  const accent = l.map((v, i) => (v + d[i]) / 2);
+  const mix = (base, t) => hex(rgb(base).map((v, i) => v + (accent[i] - v) * t));
+  return [mix(CREAM[0], 0.16), mix(CREAM[1], 0.24)];
+}
+const NAME = 'Mado';
+
+const stroke = (ctx, pts, style, width, cap = 'round') => {
+  ctx.strokeStyle = style; ctx.lineWidth = width; ctx.lineCap = cap; ctx.lineJoin = 'round';
+  ctx.beginPath();
+  for (const [x, y] of pts) ctx.lineTo(x, y);
+  ctx.stroke();
+};
+
+// A coordinate and a width, in units, moved so the stroke covers whole
+// pixels at this size. Upright and level strokes drawn through it stay
+// crisp at 32 px, where a stroke between two pixels reads as a blur.
+function snap(u, v, w) {
+  const wp = Math.max(1, Math.round(w * u));
+  return [(Math.round(v * u - wp / 2) + wp / 2) / u, wp / u];
+}
+
+// ---------------------------------------------------------------------------
+// The subject: a window (窓, mado) seen from the front, its left half put in
+// place, which is what Mado does. Lines only, no words. `u` is pixels per
+// unit, so the drawing can simplify as it gets small: below 32 px the amber
+// line and the spark give way, and the lines thicken.
+// ---------------------------------------------------------------------------
+const WIN = { x0: 17, y0: 23, x1: 83, y1: 77, bar: 35, r: 7 };
+function winPath(ctx, u, w) {
+  const [x0] = snap(u, WIN.x0, w), [x1] = snap(u, WIN.x1, w);
+  const [y0] = snap(u, WIN.y0, w), [y1] = snap(u, WIN.y1, w);
+  rr(ctx, x0, y0, x1 - x0, y1 - y0, WIN.r);
+  return { x0, x1, y0, y1 };
+}
+// The window: a white sheet in a navy frame, its title bar, the mullion
+// down its middle, and the left pane filled with the accent.
+function drawWindow(ctx, u, small, { panes = 2 } = {}) {
+  const w = small ? 4.2 : 2.8;
+  const lw = snap(u, 0, w)[1];
+  const b = winPath(ctx, u, w);
+  ctx.fillStyle = '#ffffff'; ctx.fill();
+  const [bar] = snap(u, WIN.bar, w);
+  const [mid] = snap(u, (WIN.x0 + WIN.x1) / 2, w);
+  // The pane the window was put in, clipped to the frame's curve.
+  ctx.save();
+  winPath(ctx, u, w); ctx.clip();
+  ctx.fillStyle = ACCENT;
+  ctx.fillRect(b.x0, bar, (panes === 2 ? mid : b.x0 + (b.x1 - b.x0) / 3) - b.x0, b.y1 - bar);
+  ctx.restore();
+  ctx.strokeStyle = NAVY; ctx.lineWidth = lw; ctx.lineJoin = 'round';
+  winPath(ctx, u, w); ctx.stroke();
+  stroke(ctx, [[b.x0, bar], [b.x1, bar]], NAVY, lw, 'butt');
+  if (panes === 2) {
+    stroke(ctx, [[mid, bar], [mid, b.y1]], NAVY, lw, 'butt');
+  } else {
+    for (const k of [1, 2]) {
+      const [x] = snap(u, WIN.x0 + (WIN.x1 - WIN.x0) * k / 3, w);
+      stroke(ctx, [[x, bar], [x, b.y1]], NAVY, lw, 'butt');
+    }
+  }
+  return { ...b, bar, mid };
+}
+// VARIANT 0 draws the subject in use; another number draws that candidate
+// in its place, in the app icon and in the template image, so candidates are
+// compared on the same page at every size. docs/design.md names the one
+// chosen and why the others lost.
+const VARIANT = 0;
+const CANDIDATES = [
+  {
+    name: 'A window, its left half in place',
+    desc: 'A window from the front: a white sheet in a navy frame, its title bar, a mullion down its middle, and the left pane filled with orchid, the half a shortcut put it in. One amber line of content in the right pane, and the spark in the title bar. Below 32 px the amber line and the spark go, and the frame thickens.',
+    subject(ctx, u, small) {
+      const b = drawWindow(ctx, u, small);
+      if (!small) {
+        const [y, w] = snap(u, 52, 4.2);
+        stroke(ctx, [[b.mid + 8, y], [b.x1 - 9, y]], AMBER, w);
+        const [y2] = snap(u, 62, 4.2);
+        stroke(ctx, [[b.mid + 8, y2], [b.x1 - 15, y2]], NAVY, w);
+        ctx.fillStyle = VIOLET; sparkle(ctx, 27.5, 29, 4.6); ctx.fill();
+      }
+    },
+    // The silhouette and the one feature cut out of it, for the menu bar:
+    // the window solid, its right pane hollowed, so the half put in place
+    // is the half that is filled.
+    silhouette(ctx) { rr(ctx, WIN.x0, WIN.y0, WIN.x1 - WIN.x0, WIN.y1 - WIN.y0, WIN.r); ctx.fill(); ctx.stroke(); },
+    cut(ctx) {
+      const t = 6;
+      rr(ctx, (WIN.x0 + WIN.x1) / 2 + t / 2, WIN.y0 + t, (WIN.x1 - WIN.x0) / 2 - t * 1.5, WIN.y1 - WIN.y0 - t * 2, 2.5);
+      ctx.fill();
+    },
+  },
+  {
+    name: 'A window in thirds',
+    desc: 'The same window with two mullions and its first third in orchid. Lost: at 32 px the three panes read as a table, and a third says less of Mado than a half.',
+    subject(ctx, u, small) {
+      drawWindow(ctx, u, small, { panes: 3 });
+      if (!small) { ctx.fillStyle = VIOLET; sparkle(ctx, 27.5, 29, 4.6); ctx.fill(); }
+    },
+    silhouette(ctx) { rr(ctx, WIN.x0, WIN.y0, WIN.x1 - WIN.x0, WIN.y1 - WIN.y0, WIN.r); ctx.fill(); ctx.stroke(); },
+    cut(ctx) {
+      const t = 6, w = (WIN.x1 - WIN.x0) / 3;
+      rr(ctx, WIN.x0 + w + t / 2, WIN.y0 + t, w * 2 - t * 1.5, WIN.y1 - WIN.y0 - t * 2, 2.5);
+      ctx.fill();
+    },
+  },
+];
+const CHOSEN = CANDIDATES[VARIANT];
+
+// The subject in use, drawn on a layer `px` pixels wide that is already
+// scaled to the 100-unit box. The body of a 32 px icon with its margin is
+// 26 px across, so a body under 26 is an icon under 32 px: the small form.
+function drawSubject(ctx, px) {
+  CHOSEN.subject(ctx, px / 100, px < 26);
+}
+// ---------------------------------------------------------------------------
+
+const ICONS = [
+  {
+    id: 'mado', name: CHOSEN.name, desc: CHOSEN.desc,
+    bg: ground(),   // the cream with the accent in it, top left to bottom right
+    glyph: drawSubject,
+  },
+];
+
+// four-point AI spark centered on (cx, cy)
+function sparkle(ctx, cx, cy, r) {
+  const k = r * 0.2;
+  ctx.beginPath();
+  ctx.moveTo(cx, cy - r);
+  ctx.quadraticCurveTo(cx + k, cy - k, cx + r, cy);
+  ctx.quadraticCurveTo(cx + k, cy + k, cx, cy + r);
+  ctx.quadraticCurveTo(cx - k, cy + k, cx - r, cy);
+  ctx.quadraticCurveTo(cx - k, cy - k, cx, cy - r);
+  ctx.closePath();
+}
+
+function rr(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+
+function drawIcon(canvas, icon, px, bleed) {
+  canvas.width = px; canvas.height = px;
+  const ctx = canvas.getContext('2d');
+  const inset = bleed ? 0 : Math.round(px * 0.09);
+  const body = px - inset * 2;
+
+  // the glyph on its own transparent layer, so gaps can be erased from it
+  const layer = document.createElement('canvas');
+  layer.width = body; layer.height = body;
+  const g = layer.getContext('2d');
+  g.scale(body / 100, body / 100);
+  icon.glyph(g, body);
+
+  ctx.save();
+  if (!bleed) {
+    ctx.translate(inset, inset); ctx.scale(body / 100, body / 100);
+    ctx.shadowColor = 'rgba(20, 16, 50, 0.28)'; ctx.shadowBlur = px * 0.045; ctx.shadowOffsetY = px * 0.022;
+    rr(ctx, 0, 0, 100, 100, 23); ctx.fillStyle = icon.bg[1]; ctx.fill();
+    ctx.shadowColor = 'transparent';
+    rr(ctx, 0, 0, 100, 100, 23); ctx.clip();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+  }
+  ctx.drawImage(gradientCanvas(body, icon.bg), inset, inset);
+  ctx.drawImage(layer, inset, inset);
+  ctx.restore();
+}
+
+// Diagonal gradient computed per pixel. A canvas gradient fill is dithered by
+// the browser, and that noise makes the PNG about ten times larger.
+function gradientCanvas(size, [from, to]) {
+  const rgb = hex => [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16));
+  const a = rgb(from), b = rgb(to);
+  const c = document.createElement('canvas');
+  c.width = size; c.height = size;
+  const ctx = c.getContext('2d');
+  const img = ctx.createImageData(size, size);
+  for (let y = 0; y < size; y++) {
+    for (let x = 0; x < size; x++) {
+      const t = (x + y + 1) / (2 * size), i = (y * size + x) * 4;
+      for (let k = 0; k < 3; k++) img.data[i + k] = Math.round(a[k] + (b[k] - a[k]) * t);
+      img.data[i + 3] = 255;
+    }
+  }
+  ctx.putImageData(img, 0, 0);
+  return c;
+}
+
+// The menu bar's template image, for a product with a menu bar item: the
+// subject as one black silhouette with one feature cut out of it, on a
+// transparent square, scaled to fill it. The system tints it for the bar,
+// so only its alpha counts.
+function drawTemplate(canvas, px) {
+  canvas.width = px; canvas.height = px;
+  const ctx = canvas.getContext('2d');
+  const fit = templateFit();
+  ctx.scale(px / 100, px / 100);
+  ctx.translate(50, 50); ctx.scale(fit.k, fit.k); ctx.translate(-fit.x, -fit.y);
+  ctx.fillStyle = ctx.strokeStyle = '#000'; ctx.lineWidth = 3; ctx.lineJoin = 'round';
+  CHOSEN.silhouette(ctx);
+  ctx.globalCompositeOperation = 'destination-out';
+  CHOSEN.cut(ctx);
+}
+
+// The silhouette's bounds, found once on a large canvas, and the scale that
+// makes it fill 94 of the 100 units.
+let FIT = null;
+function templateFit() {
+  if (FIT) return FIT;
+  const big = document.createElement('canvas'); big.width = big.height = 400;
+  const b = big.getContext('2d'); b.scale(4, 4);
+  b.fillStyle = b.strokeStyle = '#000'; b.lineWidth = 3; b.lineJoin = 'round';
+  CHOSEN.silhouette(b);
+  const d = b.getImageData(0, 0, 400, 400).data;
+  let x0 = 400, y0 = 400, x1 = 0, y1 = 0;
+  for (let y = 0; y < 400; y++) for (let x = 0; x < 400; x++) if (d[(y * 400 + x) * 4 + 3] > 8) {
+    x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y);
+  }
+  FIT = { k: 94 / (Math.max(x1 - x0, y1 - y0) / 4), x: (x0 + x1) / 8, y: (y0 + y1) / 8 };
+  return FIT;
+}
+
+// `css` is the displayed size; `native` forces a 1:1 pixel buffer (for the zoomed proofs)
+function makeCanvas(icon, css, opts = {}) {
+  const c = document.createElement('canvas');
+  const px = opts.native || Math.round(css * (window.devicePixelRatio || 1));
+  drawIcon(c, icon, px, opts.bleed);
+  c.style.width = css + 'px'; c.style.height = css + 'px';
+  if (opts.native) c.className = 'zoom';
+  return c;
+}
+
+function fig(canvas, caption) {
+  const f = document.createElement('figure');
+  f.appendChild(canvas);
+  const cap = document.createElement('figcaption'); cap.textContent = caption;
+  f.appendChild(cap);
+  return f;
+}
+
+const cards = document.getElementById('cards');
+for (const icon of ICONS) {
+  const card = document.createElement('div'); card.className = 'card';
+  card.appendChild(makeCanvas(icon, 280));
+  const info = document.createElement('div');
+  info.innerHTML = `<h2>${icon.name}</h2><p>${icon.desc}</p>`;
+  const sizes = document.createElement('div'); sizes.className = 'sizes';
+  for (const n of [128, 64, 32, 16]) sizes.appendChild(fig(makeCanvas(icon, n), String(n)));
+  const gap = document.createElement('div'); gap.className = 'gap'; sizes.appendChild(gap);
+  sizes.appendChild(fig(makeCanvas(icon, 128, { native: 32 }), '32 px ×4'));
+  sizes.appendChild(fig(makeCanvas(icon, 64, { native: 16 }), '16 px ×4'));
+  info.appendChild(sizes);
+  card.appendChild(info);
+  cards.appendChild(card);
+}
+
+for (const id of ['bar-dark', 'bar-light']) {
+  const bar = document.getElementById(id);
+  for (const icon of ICONS) {
+    const app = document.createElement('div'); app.className = 'org';
+    app.appendChild(makeCanvas(icon, 48, { bleed: true }));
+    const t = document.createElement('span'); t.textContent = NAME;
+    app.appendChild(t);
+    const m = document.createElement('canvas'); m.className = 'template';
+    drawTemplate(m, Math.round(18 * (window.devicePixelRatio || 1)));
+    m.style.width = '18px'; m.style.height = '18px';
+    app.appendChild(m);
+    bar.appendChild(app);
+  }
+}
+
+// The menu bar's image as a data URL, 36 px (18 pt at 2x) by default.
+window.exportTemplate = (px = 36) => {
+  const c = document.createElement('canvas');
+  drawTemplate(c, px);
+  return c.toDataURL('image/png');
+};
+
+// 2048 px PNG as a data URL: the full square by default, or the squircle
+// app icon with exportIcon(2048, false)
+window.exportIcon = (px = 2048, bleed = true) => {
+  const c = document.createElement('canvas');
+  drawIcon(c, ICONS[0], px, bleed);
+  return c.toDataURL('image/png');
+};
+</script>
+</body>
+</html>

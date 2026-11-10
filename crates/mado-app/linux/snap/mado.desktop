@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Mado
+Comment=A minimal desktop app to start a product from.
+Exec=mado
+Icon=${SNAP}/meta/gui/icon.png
+StartupWMClass=Mado
+Categories=Development;
+Terminal=false
