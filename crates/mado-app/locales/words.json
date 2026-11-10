@@ -197,6 +197,15 @@
     "de": "Dunkel",
     "es": "Oscuro"
   },
+  "Device Control and Data Access": {
+    "zh-Hans": "设备控制和数据访问",
+    "zh-Hant": "裝置控制和資料取用",
+    "ja": "デバイスの制御とデータへのアクセス",
+    "ko": "기기 제어 및 데이터 접근",
+    "fr": "Contrôle de l’appareil et accès aux données",
+    "de": "Gerätesteuerung und Datenzugriff",
+    "es": "Control de dispositivos y acceso a datos"
+  },
   "Displays": {
     "zh-Hans": "显示器",
     "zh-Hant": "顯示器",

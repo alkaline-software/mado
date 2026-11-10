@@ -266,6 +266,18 @@ pub fn ask_trust() {}
 /// Where Accessibility is given in the system's settings.
 pub const ACCESSIBILITY_SETTINGS: &str = "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility";
 
+/// Whether the system's settings call Accessibility's list Device Control
+/// and Data Access, as they do from macOS 27, so the row says the name a
+/// person will look for there.
+#[cfg(target_os = "macos")]
+pub fn device_control() -> bool {
+    objc2_foundation::NSProcessInfo::processInfo().operatingSystemVersion().majorVersion >= 27
+}
+#[cfg(not(target_os = "macos"))]
+pub fn device_control() -> bool {
+    false
+}
+
 /// A message each time Accessibility's list changes, for any app: the
 /// system's own notice, so nothing asks over and over. Elsewhere none
 /// comes.

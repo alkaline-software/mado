@@ -86,23 +86,28 @@ extern "C" {
 }
 
 /// Whether the system lets Mado read and move other apps' windows. It is
-/// asked by doing it: the app in front is asked for, and a refusal for
-/// want of Accessibility says no. `AXIsProcessTrusted` answers a running
-/// process with what it was at launch, so a grant made while Mado runs
-/// would go unseen; it decides only when the question says neither.
+/// asked by doing it: the Dock, which always runs and is never Mado, is
+/// asked its role, and a refusal for want of Accessibility says no. Never
+/// the app in front: with Mado's settings in front, Mado answered its own
+/// question and said yes without the grant. `AXIsProcessTrusted` answers a
+/// running process with what it was at launch, so a grant made while Mado
+/// runs would go unseen; it decides only when the question says neither.
 pub fn trusted() -> bool {
-    let all = unsafe { AXUIElementCreateSystemWide() };
-    if all.is_null() {
+    use objc2_app_kit::NSRunningApplication;
+    let dock = NSRunningApplication::runningApplicationsWithBundleIdentifier(&NSString::from_str("com.apple.dock")).iter().map(|a| a.processIdentifier()).find(|&pid| pid > 0);
+    let Some(pid) = dock else { return unsafe { AXIsProcessTrusted() } };
+    let app = unsafe { AXUIElementCreateApplication(pid) };
+    if app.is_null() {
         return unsafe { AXIsProcessTrusted() };
     }
-    let attr = NSString::from_str("AXFocusedApplication");
+    let attr = NSString::from_str("AXRole");
     let mut out: Ref = std::ptr::null_mut();
-    let err = unsafe { AXUIElementCopyAttributeValue(all, as_ref(&attr), &mut out) };
+    let err = unsafe { AXUIElementCopyAttributeValue(app, as_ref(&attr), &mut out) };
     unsafe {
         if !out.is_null() {
             CFRelease(out);
         }
-        CFRelease(all);
+        CFRelease(app);
     }
     match err {
         0 => true,

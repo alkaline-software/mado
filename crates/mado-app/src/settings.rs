@@ -465,6 +465,8 @@ impl Mado {
                 }))
                 .into_any_element()
         };
+        // Named as the system's settings name its list.
+        let access_name = if crate::sys::device_control() { t("Device Control and Data Access") } else { t("Accessibility") };
         let access_line = (!self.trusted).then(|| SharedString::from(t("Lets Mado move and size other apps’ windows.")));
         let login = self.motion.switch("login", self.at_login, Rc::new(|this: &mut Self, on, _, cx| this.set_launch_at_login(on, cx)), cx);
         let (shown, swapped) = (self.cfg.menu_bar.shown, self.cfg.menu_bar.swap);
@@ -489,7 +491,7 @@ impl Mado {
         ));
         let swap_line = if swapped { t("A click shows the menu; a right click, the settings.") } else { t("A click opens the settings; a right click, the menu.") };
         vec![
-            group(None, None, vec![line(t("Accessibility").into(), access_line, access, &theme)], &theme),
+            group(None, None, vec![line(access_name.into(), access_line, access, &theme)], &theme),
             group(
                 // The app's name stays as it is in every language.
                 Some("Mado".into()),
