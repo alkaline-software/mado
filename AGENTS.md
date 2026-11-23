@@ -40,7 +40,7 @@ Each is here because breaking it crashed the app or brought back a fixed bug. Th
 | What an action does, where a window goes, a second press, Restore, a snap area, the shortcuts and their config (`mado-core`, `mado.rs`) | `docs/placing.md` |
 | A call to macOS: Accessibility, the hot keys, the key recorder, the screens, the drags and the footprint, the menu bar item, the app in front, the Dock, login (`sys.rs`, `sys/`) | `docs/platform.md` |
 | Looking at a state from a script, measuring a speed | `docs/probing.md` |
-| Making something faster or lighter | `docs/performance.md` |
+| Making something faster or lighter | `docs/optimize.md` |
 | A release, a script under `scripts/release-*`, CI | `docs/release.md` |
 
 A subagent handed work on a file is told to read its doc too.
@@ -74,7 +74,7 @@ crates/mado-app/           the window
   macos/                     the Info.plist additions (LSUIElement, the languages)
 vendor/                    gpui-component and block, each with an UPSTREAM.md
 scripts/                   dev-app.sh, relaunch.sh, make-icon.sh and icon/, make-readme-gif.sh and readme/, actions/icons.py, dmg/, release-*.sh
-docs/                      design.md, placing.md, platform.md, probing.md, performance.md, release.md
+docs/                      design.md, placing.md, platform.md, probing.md, optimize.md, release.md
 ```
 
 ## Running it
@@ -90,7 +90,7 @@ One dev build at a time. After a change to the app, build it and run `scripts/re
 
 ## Writing things down
 
-- Each document has one job. This file: what Mado is, the rules every session follows, where to read next. `docs/<part>.md`: how one part works and why, with its traps. `docs/release.md`: how to cut a release. `CHANGELOG.md`: what each release changed, for the person installing it. `docs/probing.md`: how to look at the window from a script. `docs/performance.md`: how Mado is kept fast and light, with the log of every pass. `README.md`: a short introduction for GitHub. Nothing else is kept as a file: a plan or a list of tasks goes stale within weeks.
+- Each document has one job. This file: what Mado is, the rules every session follows, where to read next. `docs/<part>.md`: how one part works and why, with its traps. `docs/release.md`: how to cut a release. `CHANGELOG.md`: what each release changed, for the person installing it. `docs/probing.md`: how to look at the window from a script. `docs/optimize.md`: how Mado is kept fast and light, with the log of every pass. `README.md`: a short introduction for GitHub. Nothing else is kept as a file: a plan or a list of tasks goes stale within weeks.
 - A fact goes where its code is: how a part works and its traps in that part's doc, under `## Rules` when breaking it crashes the app or brings back a bug. This file gets a line only for a rule every session follows, or a row in its table. Keep it under 300 lines.
 - What is so now and why, not how it got there. An approach tried and dropped gets one sentence, only where someone might try it again.
 - Plain words, short declarative sentences, the reason after the rule. No hard wraps: a paragraph or a list item is one line. American spelling. No em dashes. Name the place, not a line number (`docs/design.md`, Motion; `widgets::key_caps`).

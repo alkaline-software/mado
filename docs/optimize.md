@@ -1,4 +1,4 @@
-# Performance
+# Optimization
 
 About keeping Mado fast and light: the three aims of a pass, how one is done, and the log that makes each pass start where the last one stopped.
 
