@@ -4,7 +4,8 @@
 //! key is drawn on caps by `key_text`; a hover's label is `tip`; a page's
 //! content comes in by `page_in`; something over the window comes in by
 //! `fade_in`; something small that is there or is not plays its change by
-//! `Motion::presence`.
+//! `Motion::presence`; a rounded box whose content reaches its corners
+//! keeps them round by `round_corners`.
 //!
 //! The timings are the studio's (the constitution's `docs/design.md`,
 //! Motion, Timing), and every motion eases with `ease_out_quint`.
@@ -285,6 +286,34 @@ pub fn float_shadow(theme: &gpui_component::Theme) -> Vec<BoxShadow> {
         BoxShadow { color: ink.opacity(if dark { 0.45 } else { 0.08 }), offset: point(px(0.), px(12.)), blur_radius: px(32.), spread_radius: px(-8.), inset: false },
         BoxShadow { color: ink.opacity(if dark { 0.3 } else { 0.05 }), offset: point(px(0.), px(1.)), blur_radius: px(3.), spread_radius: px(0.), inset: false },
     ]
+}
+
+/// A rounded box's corners kept round over what is drawn in it. gpui
+/// clips a box's content to its rectangle and never to its rounded corners
+/// (`ContentMask` is a rectangle), so whatever reaches a corner (a strip
+/// along an edge, a row's ground, a fade, a line) is drawn square over the
+/// curve: a sharp corner. Laid as the last child of a box with
+/// `overflow_hidden`, it paints a ring in `ground`, the color around the
+/// box, whose inside edge is the box's own rounded edge; clipped to the
+/// box, only the four corners' outsides show. `ground` is the color as it
+/// is seen there, opaque: a thinned shade paints only a tint, and what
+/// reached the corner shows through. `edge` is the box's 1-point
+/// border, drawn again over what reached it.
+pub fn round_corners(radius: Pixels, ground: Hsla, edge: Option<Hsla>) -> AnyElement {
+    let b = if edge.is_some() { px(1.) } else { px(0.) };
+    let w = radius * 2.;
+    let mut ring = div().absolute().top(-w).left(-w).right(-w).bottom(-w).rounded(radius + w).border_color(ground);
+    let width: AbsoluteLength = w.into();
+    ring.style().border_widths = EdgesRefinement { top: Some(width), right: Some(width), bottom: Some(width), left: Some(width) };
+    div()
+        .absolute()
+        .top(-b)
+        .left(-b)
+        .right(-b)
+        .bottom(-b)
+        .child(ring)
+        .children(edge.map(|c| div().absolute().inset_0().rounded(radius).border_1().border_color(c)))
+        .into_any_element()
 }
 
 /// A click the window takes for itself. The toolkit's text selection

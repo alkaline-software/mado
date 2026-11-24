@@ -23,7 +23,7 @@ use mado_core::config::Config;
 use mado_core::update;
 
 use crate::i18n::{phrase, t, tf, weave};
-use crate::mado::{Escape, Mado, OpenSettings};
+use crate::mado::{Escape, Mado, OpenSettings, Outcome};
 use crate::menu::Entry;
 use crate::widgets::{choice_pill, kanji, key_caps, page_in, small_pill, swallow_click, tip, wordmark, Press};
 
@@ -45,6 +45,13 @@ const TOP_H: Pixels = px(52.);
 /// start and end together.
 const CONTROL_W: Pixels = px(336.);
 const CONTROL_H: Pixels = px(28.);
+/// Controls whose words change with their state, each in one width that
+/// holds its longest words in every language, so a press that changes the
+/// words moves no edge (`docs/design.md`, A press moves nothing).
+const ACCESS_W: Pixels = px(216.);
+const UPDATE_W: Pixels = px(224.);
+const BADGE_W: Pixels = px(128.);
+const LANG_W: Pixels = px(128.);
 /// A shortcut's field in the hero: wide enough for four caps and its ×.
 const FIELD_W: Pixels = px(220.);
 const CARD_R: Pixels = px(12.);
@@ -147,6 +154,8 @@ fn snap_picture(what: Snapped, theme: &gpui_component::Theme) -> AnyElement {
         .children(lit.into_iter().map(|r| at(div(), r).bg(theme.primary)))
         .child(div().absolute().left(px(px_)).top(px(py_)).child(pointer("icons/pointer-halo.svg", white())))
         .child(div().absolute().left(px(px_)).top(px(py_)).child(pointer("icons/pointer.svg", black())))
+        // The menu bar's strip and a lit side reach the corners.
+        .child(crate::widgets::round_corners(px(8.), card_ground_seen(theme), Some(theme.foreground.opacity(0.16))))
         .into_any_element()
 }
 
@@ -277,6 +286,13 @@ fn card(rows: Vec<AnyElement>, theme: &gpui_component::Theme) -> Div {
 /// sidebar's in the dark.
 fn card_ground(theme: &gpui_component::Theme) -> Hsla {
     if theme.mode.is_dark() { theme.sidebar } else { theme.muted.opacity(0.4) }
+}
+
+/// A card's ground as it is seen, over the page: what a mask over a box on
+/// the card paints (`widgets::round_corners`), which a thinned shade would
+/// only tint.
+fn card_ground_seen(theme: &gpui_component::Theme) -> Hsla {
+    theme.popover.to_rgb().blend(card_ground(theme).to_rgb()).into()
 }
 
 /// A row of a card: its name, under it a line only where the name does
@@ -453,12 +469,16 @@ impl Mado {
     fn general_rows(&mut self, cx: &mut Context<Self>) -> Vec<AnyElement> {
         let theme = cx.theme().clone();
         // Accessibility: given, said so; not given, Allow, the system's own
-        // question, and once asked, a way to System Settings.
+        // question, and once asked, a way to System Settings. Each state in
+        // the same width, and the line under the name in every state, so
+        // neither a press nor the grant moves the row.
         let access = if self.trusted {
-            h_flex().h(CONTROL_H).px(px(12.)).gap(px(6.)).items_center().rounded_full().bg(theme.success.opacity(0.1)).text_size(px(12.5)).text_color(theme.success).child(Icon::default().path("icons/check.svg").with_size(px(14.))).child(t("Allowed")).into_any_element()
+            h_flex().w(ACCESS_W).h(CONTROL_H).justify_center().gap(px(6.)).items_center().rounded_full().bg(theme.success.opacity(0.1)).text_size(px(12.5)).text_color(theme.success).child(Icon::default().path("icons/check.svg").with_size(px(14.))).child(t("Allowed")).into_any_element()
         } else {
             let (icon, word) = if self.asked_trust { ("icons/external-link.svg", t("Open System Settings")) } else { ("icons/shield.svg", t("Allow")) };
             choice_pill("allow", icon, word, Press::Primary, false, &theme)
+                .w(ACCESS_W)
+                .justify_center()
                 .on_click(cx.listener(|this, _, window, cx| {
                     swallow_click(window, cx);
                     this.ask_trust(cx);
@@ -467,8 +487,19 @@ impl Mado {
         };
         // Named as the system's settings name its list.
         let access_name = if crate::sys::device_control() { t("Device Control and Data Access") } else { t("Accessibility") };
-        let access_line = (!self.trusted).then(|| SharedString::from(t("Lets Mado move and size other apps’ windows.")));
-        let login = self.motion.switch("login", self.at_login, Rc::new(|this: &mut Self, on, _, cx| this.set_launch_at_login(on, cx)), cx);
+        let access_line = Some(SharedString::from(t("Lets Mado move and size other apps’ windows.")));
+        // A refusal from the system is a mark before the switch, its words
+        // in the mark's tooltip: a line under the name would grow the row.
+        let login_switch = self.motion.switch("login", self.at_login, Rc::new(|this: &mut Self, on, _, cx| this.set_launch_at_login(on, cx)), cx);
+        let refused = self.login_said.clone().map(|why| {
+            let why = SharedString::from(why);
+            div()
+                .id("login-refused")
+                .child(Icon::default().path("icons/triangle-alert.svg").with_size(px(15.)).text_color(theme.warning))
+                .managed_tooltip(move |window, cx| tip(why.clone(), window, cx))
+                .with_animation("login-refused-in", Animation::new(crate::widgets::FOLD_ANIM).with_easing(ease_out_quint()), |d, t| d.opacity(t))
+        });
+        let login = h_flex().gap(px(10.)).items_center().children(refused).child(login_switch).into_any_element();
         let (shown, swapped) = (self.cfg.menu_bar.shown, self.cfg.menu_bar.swap);
         let in_bar = self.motion.switch("menu-bar", shown, Rc::new(move |this: &mut Self, on, _, cx| this.set_menu_bar(on, swapped, cx)), cx);
         let swap = self.motion.switch("swap", swapped, Rc::new(move |this: &mut Self, on, _, cx| this.set_menu_bar(shown, on, cx)), cx);
@@ -497,8 +528,10 @@ impl Mado {
                 Some("Mado".into()),
                 None,
                 vec![
-                    line(t("Open at login").into(), self.login_said.clone().map(SharedString::from), login, &theme),
-                    line(t("Show in menu bar").into(), (!shown).then(|| SharedString::from(t("Open Mado again to see the settings."))), in_bar, &theme),
+                    line(t("Open at login").into(), None, login, &theme),
+                    // One line in both states: shown only when hidden, it
+                    // grew the row at the switch's press.
+                    line(t("Show in menu bar").into(), Some(t("When hidden, open Mado again to see the settings.").into()), in_bar, &theme),
                     line(t("Swap clicks").into(), Some(swap_line.into()), swap, &theme),
                     line(t("Appearance").into(), None, looks.into_any_element(), &theme),
                 ],
@@ -562,7 +595,9 @@ impl Mado {
             (true, true) => (Some("icons/triangle-alert.svg"), t("Still on"), theme.warning, theme.warning.opacity(0.12)),
             (true, false) => (None, t("On"), theme.muted_foreground, theme.foreground.opacity(0.06)),
         };
-        let badge = h_flex().h(px(24.)).px(px(10.)).gap(px(5.)).items_center().rounded_full().bg(ground).text_size(px(12.)).text_color(ink).children(icon.map(|i| Icon::default().path(i).with_size(px(13.)))).child(word);
+        // One width for every state: the Snap Areas switch turns "Still on"
+        // into "On" and back.
+        let badge = h_flex().w(BADGE_W).h(px(24.)).justify_center().gap(px(5.)).items_center().rounded_full().bg(ground).text_size(px(12.)).text_color(ink).children(icon.map(|i| Icon::default().path(i).with_size(px(13.)))).child(word);
         let open = choice_pill("desktop-settings", "icons/external-link.svg", t("Open System Settings"), if clash { Press::Primary } else { Press::Quiet }, false, &theme)
             // The badge's size, so the two stand as a pair.
             .h(px(24.))
@@ -678,7 +713,9 @@ impl Mado {
             .bg(theme.popover)
             .overflow_hidden()
             .child(div().absolute().top_0().left_0().right_0().h(px(SCREEN_BAR)).bg(theme.foreground.opacity(0.06)))
-            .child(plate);
+            .child(plate)
+            // The menu bar's strip reaches the top corners.
+            .child(crate::widgets::round_corners(px(10.), card_ground_seen(&theme), Some(theme.foreground.opacity(0.18))));
         let said = self.record_said.as_ref().filter(|(a, _)| *a == action).map(|(_, s)| s.clone());
         let refused = self.refused.contains(&action).then(|| t("The system did not take this shortcut.").to_string());
         let line_under = said.or(refused);
@@ -694,8 +731,13 @@ impl Mado {
             .child(div().text_size(px(15.)).font_weight(FontWeight::SEMIBOLD).child(t(action.name())))
             .child(div().pt(px(4.)).child(field))
             .child(
+                // One line, held to its height: a press that records or
+                    // refuses keys never grows the hero.
                 div()
-                    .min_h(px(15.))
+                    .h(px(15.))
+                    .whitespace_nowrap()
+                    .overflow_hidden()
+                    .text_ellipsis()
                     .text_size(px(11.5))
                     .line_height(px(15.))
                     .text_color(theme.muted_foreground)
@@ -925,14 +967,25 @@ impl Mado {
             .when_some(SITE, |d, url| d.child(small_pill("about-site", "icons/globe.svg", t("Website"), Press::Quiet, false, &theme).h(px(28.)).on_click(move |_, _, _| crate::sys::open(url))))
             .child(small_pill("about-source", "icons/github.svg", "GitHub", Press::Quiet, false, &theme).h(px(28.)).on_click(|_, _, _| crate::sys::open(&update::repo_page())))
             .child(small_pill("about-notes", "icons/file-text.svg", t("Release Notes"), Press::Quiet, false, &theme).h(px(28.)).on_click(|_, _, _| crate::sys::open(&update::release_page(update::current_version()))));
+        // Every state of the check is the button's own label, in one
+        // width: a line under the row's name grew the card at the press. A
+        // failure's reason is in the button's tooltip.
         let u = self.update.clone();
-        let (icon, words, kind) = match (&u.found, u.downloading) {
-            (_, Some(p)) => ("icons/download.svg", tf("Downloading… {percent}%", &[("percent", &p)]), Press::Primary),
-            (Some(v), None) => ("icons/download.svg", tf("Update to {version}", &[("version", v)]), Press::Primary),
-            (None, None) => ("icons/refresh.svg", t("Check for updates").to_string(), Press::Quiet),
+        let (icon, words, kind) = match (&u.found, u.downloading, u.checking, &u.outcome) {
+            (_, Some(p), _, _) => ("icons/download.svg", tf("Downloading… {percent}%", &[("percent", &p)]), Press::Primary),
+            (_, None, true, _) => ("icons/refresh.svg", t("Checking…").to_string(), Press::Quiet),
+            (Some(_), None, false, Some(Outcome::InstallFailed(_))) => ("icons/triangle-alert.svg", t("Update failed").to_string(), Press::Primary),
+            (Some(v), None, false, _) => ("icons/download.svg", tf("Update to {version}", &[("version", v)]), Press::Primary),
+            (None, None, false, Some(Outcome::UpToDate)) => ("icons/check.svg", t("Up to date").to_string(), Press::Quiet),
+            (None, None, false, Some(Outcome::CheckFailed(_))) => ("icons/triangle-alert.svg", t("Check failed").to_string(), Press::Quiet),
+            (None, None, false, _) => ("icons/refresh.svg", t("Check for updates").to_string(), Press::Quiet),
+        };
+        let reason = match &u.outcome {
+            Some(Outcome::CheckFailed(why) | Outcome::InstallFailed(why)) if !u.checking && u.downloading.is_none() => Some(SharedString::from(why.clone())),
+            _ => None,
         };
         let busy = u.checking || u.downloading.is_some();
-        let button = choice_pill("update", icon, words, kind, busy, &theme).min_w(px(190.)).justify_center().when(!busy, |d| {
+        let button = choice_pill("update", icon, words, kind, busy, &theme).w(UPDATE_W).justify_center().when_some(reason, |d, why| d.managed_tooltip(move |window, cx| tip(why.clone(), window, cx))).when(!busy, |d| {
             d.on_click(cx.listener(|this, _, _, cx| {
                 if this.update.found.is_some() {
                     this.install_update(cx);
@@ -941,7 +994,6 @@ impl Mado {
                 }
             }))
         });
-        let said = u.said.clone().map(SharedString::from);
         let check = self.motion.switch(
             "check-updates",
             self.cfg.app.check_updates,
@@ -954,7 +1006,7 @@ impl Mado {
         );
         let mut rows = vec![group(None, None, vec![title.into_any_element()], &theme), pills.into_any_element()];
         if !update::from_store() {
-            rows.push(div().w_full().pt(px(12.)).child(group(None, None, vec![line(t("Updates").into(), said, button.into_any_element(), &theme), line(t("Check automatically").into(), None, check, &theme)], &theme)).into_any_element());
+            rows.push(div().w_full().pt(px(12.)).child(group(None, None, vec![line(t("Updates").into(), None, button.into_any_element(), &theme), line(t("Check automatically").into(), None, check, &theme)], &theme)).into_any_element());
         }
         rows
     }
@@ -969,8 +1021,12 @@ impl Mado {
             Some((_, flag, letters)) => (*flag, letters.to_string(), true),
             None => ("icons/globe.svg", t("System").to_string(), false),
         };
+        // One width for every language it can name: a pick from its list
+        // changes its words and moves none of its edges.
         h_flex()
             .id("language-pill")
+            .w(LANG_W)
+            .justify_center()
             .h(CONTROL_H)
             .px(px(12.))
             .gap(px(7.))

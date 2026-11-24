@@ -90,14 +90,25 @@ pub struct Mado {
     tiling_drawn: bool,
 }
 
-/// What the Updates row says and does.
+/// What the Updates row's button says and does. Every state is a label
+/// on the one button, in its fixed width: nothing is added under the row.
 #[derive(Default, Clone)]
 pub(crate) struct UpdateRow {
     pub checking: bool,
     pub found: Option<String>,
     /// While a download runs: how far, from 0 to 100.
     pub downloading: Option<u32>,
-    pub said: Option<String>,
+    /// How the last check or install ended, until the next press.
+    pub outcome: Option<Outcome>,
+}
+
+/// How a check or an install ended: the button's label, and on a failure
+/// the reason, in its tooltip.
+#[derive(Clone)]
+pub(crate) enum Outcome {
+    UpToDate,
+    CheckFailed(String),
+    InstallFailed(String),
 }
 
 impl Mado {
@@ -620,7 +631,7 @@ impl Mado {
     /// Ask for the newest version, off the main thread.
     pub(crate) fn check_updates(&mut self, cx: &mut Context<Self>) {
         self.update.checking = true;
-        self.update.said = None;
+        self.update.outcome = None;
         cx.notify();
         let task = cx.background_executor().spawn(async { update::latest() });
         cx.spawn(async move |this, cx| {
@@ -635,10 +646,10 @@ impl Mado {
                             this.update.found = Some(latest);
                         } else {
                             this.update.found = None;
-                            this.update.said = Some(t("Up to date.").into());
+                            this.update.outcome = Some(Outcome::UpToDate);
                         }
                     }
-                    Err(e) => this.update.said = Some(tf("The check did not go through: {why}", &[("why", &e)])),
+                    Err(e) => this.update.outcome = Some(Outcome::CheckFailed(tf("The check did not go through: {why}", &[("why", &e)]))),
                 }
                 cx.notify();
             });
@@ -651,6 +662,7 @@ impl Mado {
     pub(crate) fn install_update(&mut self, cx: &mut Context<Self>) {
         let Some(version) = self.update.found.clone() else { return };
         self.update.downloading = Some(0);
+        self.update.outcome = None;
         cx.notify();
         let (tx, rx) = std::sync::mpsc::channel::<u32>();
         let task = cx.background_executor().spawn(async move {
@@ -684,7 +696,7 @@ impl Mado {
                 this.update.downloading = None;
                 match done {
                     Ok(()) => cx.quit(),
-                    Err(e) => this.update.said = Some(tf("The update did not go through: {e}", &[("e", &e)])),
+                    Err(e) => this.update.outcome = Some(Outcome::InstallFailed(tf("The update did not go through: {e}", &[("e", &e)]))),
                 }
                 cx.notify();
             });
@@ -752,6 +764,23 @@ impl Mado {
                 }
                 // A newer version waits: About's dot and its button.
                 "updatefound" => self.update.found = Some("9.9.9".into()),
+                // The Updates button's own press: a real check, fetched.
+                "check" => self.check_updates(cx),
+                // Each state the Updates button comes to after a press;
+                // nothing is fetched.
+                "checking" => self.update.checking = true,
+                "uptodate" => self.update.outcome = Some(Outcome::UpToDate),
+                "checkfailed" => self.update.outcome = Some(Outcome::CheckFailed(tf("The check did not go through: {why}", &[("why", &"GitHub answered 404")]))),
+                "downloading" => {
+                    self.update.found = Some("9.9.9".into());
+                    self.update.downloading = Some(100);
+                }
+                "installfailed" => {
+                    self.update.found = Some("9.9.9".into());
+                    self.update.outcome = Some(Outcome::InstallFailed(tf("The update did not go through: {e}", &[("e", &"the disk image could not be opened")])));
+                }
+                // Open at login refused by the system.
+                "loginrefused" => self.login_said = Some("Operation not permitted".into()),
                 "menu" => {
                     let entries = vec![Entry::choice("system", "icons/globe.svg", t("System")), Entry::Rule];
                     self.menus.show("language", point(px(600.), px(46.)), entries);

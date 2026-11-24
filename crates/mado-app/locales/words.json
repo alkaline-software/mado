@@ -422,15 +422,6 @@
     "de": "Beim Anmelden öffnen",
     "es": "Abrir al iniciar sesión"
   },
-  "Open Mado again to see the settings.": {
-    "zh-Hans": "再次打开 Mado 即可看到设置。",
-    "zh-Hant": "再次打開 Mado 即可看到設定。",
-    "ja": "設定は Mado をもう一度開くと表示されます。",
-    "ko": "설정을 보려면 Mado를 다시 여십시오.",
-    "fr": "Rouvrez Mado pour voir les réglages.",
-    "de": "Mado erneut öffnen, um die Einstellungen zu sehen.",
-    "es": "Vuelve a abrir Mado para ver los ajustes."
-  },
   "Open System Settings": {
     "zh-Hans": "打开系统设置",
     "zh-Hant": "打開系統設定",
@@ -719,15 +710,6 @@
     "de": "Oben rechts",
     "es": "Arriba a la derecha"
   },
-  "Up to date.": {
-    "zh-Hans": "已是最新版本。",
-    "zh-Hant": "已是最新版本。",
-    "ja": "最新です。",
-    "ko": "최신 버전입니다.",
-    "fr": "À jour.",
-    "de": "Auf dem neuesten Stand.",
-    "es": "Está al día."
-  },
   "Update to {version}": {
     "zh-Hans": "更新到 {version}",
     "zh-Hant": "更新到 {version}",
@@ -781,5 +763,50 @@
     "fr": "{studio} présente",
     "de": "{studio} präsentiert",
     "es": "{studio} presenta"
+  },
+  "Up to date": {
+    "zh-Hans": "已是最新版本",
+    "zh-Hant": "已是最新版本",
+    "ja": "最新です",
+    "ko": "최신 버전",
+    "fr": "À jour",
+    "de": "Aktuell",
+    "es": "Al día"
+  },
+  "Checking…": {
+    "zh-Hans": "正在检查…",
+    "zh-Hant": "正在檢查…",
+    "ja": "確認中…",
+    "ko": "확인 중…",
+    "fr": "Recherche…",
+    "de": "Wird gesucht…",
+    "es": "Buscando…"
+  },
+  "Check failed": {
+    "zh-Hans": "检查失败",
+    "zh-Hant": "檢查失敗",
+    "ja": "確認できませんでした",
+    "ko": "확인 실패",
+    "fr": "Échec de la recherche",
+    "de": "Suche fehlgeschlagen",
+    "es": "Error al buscar"
+  },
+  "Update failed": {
+    "zh-Hans": "更新失败",
+    "zh-Hant": "更新失敗",
+    "ja": "アップデートできませんでした",
+    "ko": "업데이트 실패",
+    "fr": "Échec de la mise à jour",
+    "de": "Update fehlgeschlagen",
+    "es": "Error al actualizar"
+  },
+  "When hidden, open Mado again to see the settings.": {
+    "zh-Hans": "隐藏后，再次打开 Mado 即可看到设置。",
+    "zh-Hant": "隱藏後，再次打開 Mado 即可看到設定。",
+    "ja": "非表示のときは、Mado をもう一度開くと設定が表示されます。",
+    "ko": "숨겨져 있을 때는 Mado를 다시 열면 설정이 표시됩니다.",
+    "fr": "Masqué, rouvrez Mado pour voir les réglages.",
+    "de": "Ausgeblendet: Mado erneut öffnen, um die Einstellungen zu sehen.",
+    "es": "Si está oculto, vuelve a abrir Mado para ver los ajustes."
   }
 }

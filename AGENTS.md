@@ -8,11 +8,13 @@ The one idea: **the core decides, the app carries out.** Where every action puts
 
 ## The standard
 
-Mado's design is held to the studio's bar: minimal, calm, intuitive, finished in every state. `docs/design.md` is that standard in Mado's terms (its orchid accent, its icon, its one window, the menu bar item, motion, languages), and every change a person can see meets it unasked. Three of its rules hold in every session:
+Mado's design is held to the studio's bar: minimal, calm, intuitive, finished in every state. `docs/design.md` is that standard in Mado's terms (its orchid accent, its icon, its one window, the menu bar item, motion, languages), and every change a person can see meets it unasked. Five of its rules hold in every session:
 
 - **Nothing jumps.** What appears, goes, opens, closes, grows or moves does so over a moment, with the pattern its neighbors use (`widgets.rs`, `menu.rs`).
+- **A press moves nothing.** A press changes what is in its own place and nothing else: no row, card, pill or page grows, shrinks or moves by a pixel, in any direction. What it has to say goes in room that is there in every state (the button's own words, a line under the row in every state, a tooltip), and a control whose words change is one width in every language.
+- **No sharp corners.** A rounded box is round at every corner whatever is drawn in it. gpui clips content to the rectangle, never the rounded corner, so a box whose content reaches a corner lays `widgets::round_corners` last, in the opaque color seen around it.
 - **Words are few.** A row's name says what it is; a line under it only where the name does not say it all.
-- **Look before saying it is done:** at all the change shows, hides or moves, in both appearances and in French or German (`docs/probing.md`).
+- **Look before saying it is done:** at all the change shows, hides or moves, in both appearances and in French or German, and at each state a press leads to beside the state before it (`scripts/press-diff.R`), and at every rounded box's corners enlarged (`scripts/corners.R`, `docs/probing.md`).
 
 ## Rules that hold everywhere
 
@@ -73,7 +75,7 @@ crates/mado-app/           the window
   assets/ themes/ locales/   icons, each action's picture, the app icon, the menu bar image; the palette; the words
   macos/                     the Info.plist additions (LSUIElement, the languages)
 vendor/                    gpui-component and block, each with an UPSTREAM.md
-scripts/                   dev-app.sh, relaunch.sh, make-icon.sh and icon/, make-readme-gif.sh and readme/, actions/icons.py, dmg/, release-*.sh
+scripts/                   dev-app.sh, relaunch.sh, press-diff.R, corners.R, make-icon.sh and icon/, make-readme-gif.sh and readme/, actions/icons.py, dmg/, release-*.sh
 docs/                      design.md, placing.md, platform.md, probing.md, optimize.md, release.md
 ```
 
