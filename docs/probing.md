@@ -29,6 +29,8 @@ A process may take a picture of its own windows without Screen Recording access,
 
 `MADO_GO=run:left-half;run:left-half;run:restore` moves the probe's own settings window, and a debug build writes each move to `~/Library/Logs/mado-dev.log`: the action, the window, its frame before and after, and the frame asked for. This goes through Accessibility, the layout and the memory as a shortcut does, on the main thread (a window of Mado's own, `docs/platform.md`). A move of another app's window, on the background executor, a tiling (it leaves Mado's own windows alone, so a probe would move the person's), a drag to a snap area or away and the menu bar item's menu need the dev bundle with Accessibility given (`scripts/dev-app.sh`) and a person's hands: a probe copy holds no shortcut, watches no drag and has no item. Say which was checked.
 
+Each step moves whatever window is in front when it runs. A probe that loses the front between steps (another app comes forward) moves the person's window: the log names each window's title, and a step that names another app's has moved it.
+
 The settings window is at least 860 wide, so a half on a narrow screen shows the app refusing its size and `settle` keeping it at the screen's edge.
 
 ## Measuring
@@ -43,6 +45,9 @@ A speed-up starts from a number and ends with another. The stopwatch goes in a c
 - **A rate:** the app's CPU time and the window server's over the same seconds, doing nothing, as it was, and as it is. Frames cost the window server too, and with no baseline to take off, a saving does not show.
 - **Work on the GPU:** a call that hands it work returns before the work is done, and the wait shows up under whatever comes next. Wait for it (`llama_synchronize`) before the clock stops.
 - **What grows with use:** rows made up for the purpose at a size the person has and at several times it, never the person's own words.
+- **Memory:** the physical footprint (`footprint <pid>`), never the resident size `top` and `ps` give. A window's drawing surfaces are IOSurfaces, which those leave out: a leak of 2 GB read there as 207 MB. `heap <pid>` counts the live objects of each Objective-C class (`GPUIView`, `CAMetalLayer`).
+- **A window opened and closed** many times by a task in the copy (`remove_window`, then the settings opened again), the footprint read before and after. A closed window that keeps its surfaces shows only so.
+- **Launch:** the time from `main` to the first frame painted, and to each step of start-up between. A bundle's launch differs from a bare binary's (the Dock icon, the app's own defaults), so it is timed in a copy of the dev bundle with the build put in it and signed ad hoc (`codesign -s - --force --deep`).
 - **Nothing lost:** what the product gives is compared with the old build's, word for word, kept beside the new one.
 
 ## The core from a terminal

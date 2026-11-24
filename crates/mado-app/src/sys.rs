@@ -553,18 +553,36 @@ pub fn set_launch_at_login(_on: bool) -> Result<(), String> {
     Err("not on this system".into())
 }
 
+/// Whether the system has a font family of this name, asked for that
+/// family alone. On the main thread. Elsewhere it is not asked so, and
+/// the caller lists the families.
+#[cfg(target_os = "macos")]
+pub fn has_font_family(name: &str) -> Option<bool> {
+    let mtm = objc2::MainThreadMarker::new()?;
+    let fonts = objc2_app_kit::NSFontManager::sharedFontManager(mtm);
+    Some(fonts.availableMembersOfFontFamily(&objc2_foundation::NSString::from_str(name)).is_some())
+}
+#[cfg(not(target_os = "macos"))]
+pub fn has_font_family(_name: &str) -> Option<bool> {
+    None
+}
+
 /// Open a file or a link with the app the system gives it.
 pub fn open(target: &str) {
     let _ = opener::open(target);
 }
 
 /// The Dock icon, for a bare binary run from `target/`. A bundle carries
-/// the same picture as its `.icns`.
+/// the same picture as its `.icns` and is left to it: decoding the PNG
+/// took 60 ms of every launch.
 #[cfg(target_os = "macos")]
 pub fn install_dock_icon() {
     use objc2::{AllocAnyThread as _, MainThreadMarker};
     use objc2_app_kit::{NSApplication, NSImage};
     use objc2_foundation::NSData;
+    if objc2_foundation::NSBundle::mainBundle().bundleIdentifier().is_some() {
+        return;
+    }
     let Some(mtm) = MainThreadMarker::new() else { return };
     let data = NSData::with_bytes(include_bytes!("../assets/icon/icon-1024.png"));
     if let Some(image) = NSImage::initWithData(NSImage::alloc(), &data) {
@@ -768,4 +786,3 @@ pub fn keep_on_top(window: &gpui::Window) {
 }
 #[cfg(not(target_os = "macos"))]
 pub fn keep_on_top(_window: &gpui::Window) {}
-

@@ -345,3 +345,5 @@ Check out the new upstream revision, copy the four crates over these, re-apply
 the changes listed above, update the revision here, and build.
 
 63. `crates/ui/src/notification.rs`: the clock that moves notifications along (`NotificationList::tick`) runs only from a push until the last notification is gone. Upstream spawned it in `NotificationList::new`, which `Root` calls for every window, and ticked every 50 ms for the window's life, waking the main thread twenty times a second in a window that never showed a notification.
+
+64. `crates/ui/src/inspector.rs` (`init`): the inspector's element registered as gpui from zed `0eda7703` asks, a factory called once a window that makes the window's renderer. Upstream's closure, built for the earlier gpui, does not compile against it. Mado moved to that revision for its fix of a window that kept its view, Metal layer and drawing surface after it closed (`docs/optimize.md`, Log).

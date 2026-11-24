@@ -15,9 +15,8 @@ use gpui::{App, Global, SharedString};
 
 const FACES: &[&[u8]] = &[include_bytes!("../assets/fonts/Belleza-Regular.ttf")];
 
-/// What the system has of the faces wanted, found once at start: listing
-/// every installed face takes about a tenth of a second on a Mac with many
-/// fonts, and asked as the window draws it held every frame that long.
+/// What the system has of the faces wanted, found once at start: asked
+/// as the window draws, it held every frame.
 struct Found {
     wordmark: SharedString,
     kanji: Option<SharedString>,
@@ -26,13 +25,17 @@ struct Found {
 impl Global for Found {}
 
 /// Load the carried faces and find the system's. Called once at start.
+/// Each face wanted is asked for by its family's name
+/// (`sys::has_font_family`): listing every installed family took 120 ms
+/// of every launch on a Mac with about 300, before the shortcuts were
+/// held. Where the system cannot be asked so, the families are listed.
 pub fn install(cx: &mut App) {
     let faces = FACES.iter().map(|b| Cow::Borrowed(*b)).collect();
     if let Err(e) = cx.text_system().add_fonts(faces) {
         eprintln!("mado: the carried faces did not load: {e}");
     }
-    let names = cx.text_system().all_font_names();
-    let has = |face: &str| names.iter().any(|n| n == face);
+    let mut listed: Option<Vec<String>> = None;
+    let mut has = |face: &str| crate::sys::has_font_family(face).unwrap_or_else(|| listed.get_or_insert_with(|| cx.text_system().all_font_names()).iter().any(|n| n == face));
     let wordmark = if has("Optima") { "Optima".into() } else { "Belleza".into() };
     let kanji = KANJI_FACES.iter().find(|f| has(f)).map(|f| SharedString::from(*f));
     cx.set_global(Found { wordmark, kanji });
