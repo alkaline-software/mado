@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.1.4
+
+1. **Buttons stay where they are.** A press changes only what was pressed: checking for updates says Checking…, Up to date or Check failed on its own button, and nothing in the settings moves.
+2. **Round at every corner.** The pictures on Actions no longer show square corners at their edges.
+
 ## v0.1.3
 
 1. **Lighter and quicker.** Mado starts in half the time and holds a fifth of the memory it did while it waits in the menu bar.
