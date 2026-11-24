@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.1.3
+
+1. **Lighter and quicker.** Mado starts in half the time and holds a fifth of the memory it did while it waits in the menu bar.
+2. **A wider settings window.** It opens at 860 by 600, the size of the studio's other apps.
+
+**Fixes**
+
+- Memory no longer grows each time the settings are opened and closed.
+
 ## v0.1.2
 
 1. **Windows always glide.** Every move is carried over a moment, as macOS's own tiling carries a window, and the Animate windows switch is gone.
