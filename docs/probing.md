@@ -29,7 +29,7 @@ A process may take a picture of its own windows without Screen Recording access,
 
 `MADO_GO=run:left-half;run:left-half;run:restore` moves the probe's own settings window, and a debug build writes each move to `~/Library/Logs/mado-dev.log`: the action, the window, its frame before and after, and the frame asked for. This goes through Accessibility, the layout and the memory as a shortcut does, on the main thread (a window of Mado's own, `docs/platform.md`). A move of another app's window, on the background executor, a tiling (it leaves Mado's own windows alone, so a probe would move the person's), a drag to a snap area or away and the menu bar item's menu need the dev bundle with Accessibility given (`scripts/dev-app.sh`) and a person's hands: a probe copy holds no shortcut, watches no drag and has no item. Say which was checked.
 
-The settings window is at least 820 wide, so a half on a narrow screen shows the app refusing its size and `settle` keeping it at the screen's edge.
+The settings window is at least 860 wide, so a half on a narrow screen shows the app refusing its size and `settle` keeping it at the screen's edge.
 
 ## Measuring
 

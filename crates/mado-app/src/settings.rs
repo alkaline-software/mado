@@ -30,7 +30,7 @@ use crate::widgets::{choice_pill, kanji, key_caps, page_in, small_pill, swallow_
 /// The window's size as it opens, and the least it is dragged to. It is
 /// never narrower than it opens: the rows are laid out for that width,
 /// and narrower, names broke mid-word. Shorter, the page scrolls.
-pub const SETTINGS_W: Pixels = px(820.);
+pub const SETTINGS_W: Pixels = px(860.);
 pub const SETTINGS_H: Pixels = px(600.);
 /// About's name in kanji: 窓, a window.
 const KANJI: Option<&str> = Some("窓");
