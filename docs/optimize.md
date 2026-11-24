@@ -25,6 +25,19 @@ About keeping Mado fast and light: the three aims of a pass, how one is done, an
 
 Newest first.
 
+### v0.1.3, 2026-11-24: the second pass
+
+Covered `16ad847` to `4420fb0`: the settings at 860 wide, every press kept in its own control (the Updates button's states, fixed widths, the mark at Open at login) and the corner masks on Actions.
+
+Looked at: what the changes add to a frame and to the window at rest. Nothing new runs on a timer, reads the disk, waits on the main thread or grows with use; the widths are numbers, not measured at a frame. Measured in dev builds, a frame from the top of `render` to a `canvas` painted last over 300 frames, and at rest with `top`, beside the v0.1.3 code built the same way.
+
+Found: nothing to fix.
+
+- A frame, median and 90th percentile: General 1.15 and 1.86 ms; Actions 1.72 and 2.82 ms with the corner masks, 1.66 and 2.69 ms without; About 0.71 and 1.38 ms with its mask, 0.94 and 1.46 ms without. The masks are within the noise between two runs.
+- At rest with the settings open: 0.2 to 0.4% CPU and 0 to 1 idle wakeups a second on every section, the same for the v0.1.3 code. The first pass's 0.1 to 0.3% and none were read another way (a bundle, not a probe copy); measured side by side, nothing changed.
+
+Left for later: what the first pass left, unchanged.
+
 ### v0.1.2, 2026-11-24: the first pass
 
 Covered everything, up to `16ad847`.
